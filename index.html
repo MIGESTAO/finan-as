@@ -17,7 +17,6 @@
       --accent-gold: #c9a227;
       --accent-gold-light: #e8c547;
       --accent-emerald: #10b981;
-      --accent-emerald-dark: #059669;
       --text-primary: #f0f5f2;
       --text-secondary: #8a9a8f;
       --text-muted: #5a6a5f;
@@ -45,10 +44,6 @@
         linear-gradient(rgba(201, 162, 39, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(201, 162, 39, 0.03) 1px, transparent 1px);
       background-size: 50px 50px;
-    }
-
-    .glow-gold {
-      box-shadow: 0 0 40px rgba(201, 162, 39, 0.15);
     }
 
     .card {
@@ -94,6 +89,20 @@
       background: var(--bg-card);
     }
 
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.3);
+    }
+
     .input-field {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
@@ -108,14 +117,6 @@
       outline: none;
       border-color: var(--accent-gold);
       box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1);
-    }
-
-    .input-field::placeholder {
-      color: var(--text-muted);
-    }
-
-    select.input-field {
-      cursor: pointer;
     }
 
     .nav-item {
@@ -138,23 +139,6 @@
       background: linear-gradient(135deg, rgba(201, 162, 39, 0.15), rgba(201, 162, 39, 0.05));
       color: var(--accent-gold);
       border-left: 3px solid var(--accent-gold);
-    }
-
-    .stat-card {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 100px;
-      height: 100px;
-      background: radial-gradient(circle, rgba(201, 162, 39, 0.1) 0%, transparent 70%);
-      border-radius: 50%;
-      transform: translate(30%, -30%);
     }
 
     .badge {
@@ -313,26 +297,6 @@
       }
     }
 
-    .tab-btn {
-      padding: 12px 24px;
-      border-radius: 10px;
-      background: transparent;
-      color: var(--text-secondary);
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .tab-btn.active {
-      background: var(--bg-elevated);
-      color: var(--accent-gold);
-      border-color: var(--border);
-    }
-
-    .tab-btn:hover:not(.active) {
-      color: var(--text-primary);
-    }
-
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -347,16 +311,9 @@
       border-radius: 4px;
     }
 
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--text-muted);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
+    .loan-highlight {
+      background: linear-gradient(135deg, rgba(201, 162, 39, 0.1), transparent);
+      border-left: 3px solid var(--accent-gold);
     }
   </style>
 </head>
@@ -431,26 +388,7 @@
         </svg>
         <span>Relatorios</span>
       </div>
-
-      <div class="nav-item" data-page="alertas">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-        </svg>
-        <span>Alertas</span>
-      </div>
     </nav>
-
-    <div class="mt-auto pt-8 border-t border-gray-700 mt-8">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold">
-          U
-        </div>
-        <div>
-          <p class="text-sm font-medium" id="userName">Usuario</p>
-          <p class="text-xs text-gray-500">Versao 1.0</p>
-        </div>
-      </div>
-    </div>
   </aside>
 
   <!-- Mobile Menu Toggle -->
@@ -471,7 +409,7 @@
 
       <!-- Stats Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="card stat-card p-6 animate-fadeUp" style="animation-delay: 0.1s">
+        <div class="card p-6 animate-fadeUp" style="animation-delay: 0.1s">
           <div class="flex items-center justify-between mb-4">
             <span class="text-gray-400 text-sm">Saldo Total</span>
             <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
@@ -484,7 +422,7 @@
           <p class="text-xs text-emerald-500 mt-2">Disponivel</p>
         </div>
 
-        <div class="card stat-card p-6 animate-fadeUp" style="animation-delay: 0.2s">
+        <div class="card p-6 animate-fadeUp" style="animation-delay: 0.2s">
           <div class="flex items-center justify-between mb-4">
             <span class="text-gray-400 text-sm">Receitas do Mes</span>
             <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
@@ -497,7 +435,7 @@
           <p class="text-xs text-amber-500 mt-2">Entradas</p>
         </div>
 
-        <div class="card stat-card p-6 animate-fadeUp" style="animation-delay: 0.3s">
+        <div class="card p-6 animate-fadeUp" style="animation-delay: 0.3s">
           <div class="flex items-center justify-between mb-4">
             <span class="text-gray-400 text-sm">Despesas do Mes</span>
             <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
@@ -510,9 +448,9 @@
           <p class="text-xs text-red-500 mt-2">Saidas</p>
         </div>
 
-        <div class="card stat-card p-6 animate-fadeUp" style="animation-delay: 0.4s">
+        <div class="card p-6 animate-fadeUp" style="animation-delay: 0.4s">
           <div class="flex items-center justify-between mb-4">
-            <span class="text-gray-400 text-sm">Total Emprestado</span>
+            <span class="text-gray-400 text-sm">Total a Receber</span>
             <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
               <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z"/>
@@ -520,7 +458,7 @@
             </div>
           </div>
           <p class="text-2xl font-bold" id="statEmprestado">0 MT</p>
-          <p class="text-xs text-blue-500 mt-2">A receber</p>
+          <p class="text-xs text-blue-500 mt-2">Emprestimos ativos</p>
         </div>
       </div>
 
@@ -628,7 +566,6 @@
               <tr>
                 <th>Data</th>
                 <th>Categoria</th>
-                <th>Subcategoria</th>
                 <th>Descricao</th>
                 <th>Valor</th>
                 <th>Acoes</th>
@@ -636,7 +573,7 @@
             </thead>
             <tbody id="despesasTable">
               <tr>
-                <td colspan="6" class="text-center text-gray-500 py-8">Nenhuma despesa registrada</td>
+                <td colspan="5" class="text-center text-gray-500 py-8">Nenhuma despesa registrada</td>
               </tr>
             </tbody>
           </table>
@@ -649,7 +586,7 @@
       <header class="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 class="text-3xl font-bold mb-2">Emprestimos</h2>
-          <p class="text-gray-400">Gerencie emprestimos com juros rotativos</p>
+          <p class="text-gray-400">Sistema de juros rotativos - Taxas de 20% a 50% ao mes</p>
         </div>
         <button class="btn-primary" onclick="openModal('emprestimo')">
           <span class="flex items-center gap-2">
@@ -661,10 +598,21 @@
         </button>
       </header>
 
+      <!-- Info Box -->
+      <div class="card p-6 mb-6 border-amber-500/30 bg-amber-500/5">
+        <h4 class="font-semibold text-amber-400 mb-2">Como funciona o Juros Rotativo</h4>
+        <ul class="text-sm text-gray-400 space-y-1">
+          <li>• Os juros sao aplicados mensalmente sobre o saldo devedor atual</li>
+          <li>• Exemplo: 1000 MT com 30% = 1300 MT no mes seguinte</li>
+          <li>• Se pagar 300 MT, o saldo fica 1000 MT, e no mes seguinte sera 1300 MT novamente</li>
+          <li>• Use o botao "Aplicar Juros" para simular a passagem de um mes</li>
+        </ul>
+      </div>
+
       <!-- Summary Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div class="card p-6">
-          <p class="text-gray-400 text-sm mb-2">Total Emprestado</p>
+          <p class="text-gray-400 text-sm mb-2">Capital Emprestado</p>
           <p class="text-2xl font-bold text-amber-400" id="totalEmprestado">0 MT</p>
         </div>
         <div class="card p-6">
@@ -683,9 +631,9 @@
             <thead>
               <tr>
                 <th>Cliente</th>
-                <th>Valor Inicial</th>
+                <th>Capital Inicial</th>
                 <th>Taxa</th>
-                <th>Saldo Atual</th>
+                <th>Saldo Devedor</th>
                 <th>Data</th>
                 <th>Status</th>
                 <th>Acoes</th>
@@ -706,7 +654,7 @@
       <header class="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 class="text-3xl font-bold mb-2">Dividas</h2>
-          <p class="text-gray-400">Controle suas dividas e pagamentos</p>
+          <p class="text-gray-400">Controle suas dividas com terceiros</p>
         </div>
         <button class="btn-primary" onclick="openModal('divida')">
           <span class="flex items-center gap-2">
@@ -726,7 +674,6 @@
                 <th>Nome</th>
                 <th>Credor</th>
                 <th>Valor Total</th>
-                <th>Parcelas</th>
                 <th>Vencimento</th>
                 <th>Status</th>
                 <th>Acoes</th>
@@ -734,7 +681,7 @@
             </thead>
             <tbody id="dividasTable">
               <tr>
-                <td colspan="7" class="text-center text-gray-500 py-8">Nenhuma divida registrada</td>
+                <td colspan="6" class="text-center text-gray-500 py-8">Nenhuma divida registrada</td>
               </tr>
             </tbody>
           </table>
@@ -797,12 +744,6 @@
         <p class="text-gray-400">Analise detalhada das suas financas</p>
       </header>
 
-      <div class="flex gap-4 mb-6 flex-wrap">
-        <button class="tab-btn active" data-tab="mensal">Mensal</button>
-        <button class="tab-btn" data-tab="anual">Anual</button>
-        <button class="tab-btn" data-tab="emprestimos">Emprestimos</button>
-      </div>
-
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div class="card p-6">
           <h3 class="text-lg font-semibold mb-4">Resumo Financeiro</h3>
@@ -811,7 +752,7 @@
 
         <div class="card p-6">
           <h3 class="text-lg font-semibold mb-4">Estatisticas</h3>
-          <div class="space-y-4" id="estatisticasRelatorio">
+          <div class="space-y-4">
             <div class="flex justify-between items-center p-4 bg-gray-800 rounded-xl">
               <span class="text-gray-400">Total Receitas</span>
               <span class="font-bold text-emerald-400" id="relReceitas">0 MT</span>
@@ -837,20 +778,6 @@
             Exportar CSV
           </span>
         </button>
-      </div>
-    </section>
-
-    <!-- Alertas Page -->
-    <section id="page-alertas" class="page hidden">
-      <header class="mb-8">
-        <h2 class="text-3xl font-bold mb-2">Alertas</h2>
-        <p class="text-gray-400">Notificacoes e lembretes importantes</p>
-      </header>
-
-      <div class="space-y-4" id="alertasList">
-        <div class="card p-6 text-center">
-          <p class="text-gray-500">Nenhum alerta no momento</p>
-        </div>
       </div>
     </section>
   </main>
@@ -883,15 +810,6 @@
 
         // Create tables
         db.run(`
-          CREATE TABLE IF NOT EXISTS usuarios (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT,
-            email TEXT,
-            senha TEXT
-          )
-        `);
-
-        db.run(`
           CREATE TABLE IF NOT EXISTS receitas (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             valor REAL,
@@ -908,13 +826,13 @@
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             valor REAL,
             categoria TEXT,
-            subcategoria TEXT,
             descricao TEXT,
             metodo TEXT,
             data DATE
           )
         `);
 
+        // Emprestimos - SEM parcelas, juros rotativos
         db.run(`
           CREATE TABLE IF NOT EXISTS emprestimos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -923,11 +841,11 @@
             taxa_juros INTEGER,
             saldo_atual REAL,
             data_inicio DATE,
-            status TEXT,
-            ultimo_calculo DATE
+            status TEXT
           )
         `);
 
+        // Pagamentos feitos pelos clientes
         db.run(`
           CREATE TABLE IF NOT EXISTS pagamentos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -938,17 +856,25 @@
           )
         `);
 
+        // Historico de aplicacao de juros
+        db.run(`
+          CREATE TABLE IF NOT EXISTS historico_juros (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            emprestimo_id INTEGER,
+            saldo_antes REAL,
+            juros_aplicado REAL,
+            saldo_depois REAL,
+            data_aplicacao DATE,
+            FOREIGN KEY (emprestimo_id) REFERENCES emprestimos(id)
+          )
+        `);
+
         db.run(`
           CREATE TABLE IF NOT EXISTS dividas (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT,
             credor TEXT,
             valor_total REAL,
-            taxa_juros REAL,
-            num_parcelas INTEGER,
-            valor_parcela REAL,
-            parcelas_pagas INTEGER DEFAULT 0,
-            data_inicio DATE,
             data_vencimento DATE,
             status TEXT
           )
@@ -973,23 +899,6 @@
             data_criacao DATE
           )
         `);
-
-        db.run(`
-          CREATE TABLE IF NOT EXISTS transacoes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            tipo TEXT,
-            valor REAL,
-            categoria TEXT,
-            descricao TEXT,
-            data DATE
-          )
-        `);
-
-        // Insert default user if not exists
-        const userCheck = db.exec("SELECT COUNT(*) FROM usuarios");
-        if (userCheck[0].values[0][0] === 0) {
-          db.run("INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)", ['Usuario', 'usuario@email.com', '123456']);
-        }
 
         showToast('Sistema inicializado com sucesso!', 'success');
         refreshAll();
@@ -1050,7 +959,6 @@
         document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
         document.getElementById(`page-${page}`).classList.remove('hidden');
 
-        // Close mobile menu
         document.getElementById('sidebar').classList.remove('open');
       });
     });
@@ -1061,7 +969,7 @@
     });
 
     // Modal functions
-    function openModal(type) {
+    function openModal(type, id = null) {
       const modal = document.getElementById('modalOverlay');
       const content = document.getElementById('modalContent');
 
@@ -1106,10 +1014,6 @@
                 <label class="block text-sm text-gray-400 mb-2">Data</label>
                 <input type="date" name="data" class="input-field" value="${new Date().toISOString().split('T')[0]}" required>
               </div>
-              <div>
-                <label class="block text-sm text-gray-400 mb-2">Observacao</label>
-                <textarea name="observacao" class="input-field" rows="2"></textarea>
-              </div>
               <div class="flex gap-4 pt-4">
                 <button type="button" class="btn-secondary flex-1" onclick="closeModal()">Cancelar</button>
                 <button type="submit" class="btn-primary flex-1">Salvar</button>
@@ -1134,13 +1038,8 @@
                   <option value="Habitacao">Habitacao</option>
                   <option value="Internet">Internet</option>
                   <option value="Energia">Energia</option>
-                  <option value="Impostos">Impostos</option>
                   <option value="Outros">Outros</option>
                 </select>
-              </div>
-              <div>
-                <label class="block text-sm text-gray-400 mb-2">Subcategoria</label>
-                <input type="text" name="subcategoria" class="input-field" placeholder="Ex: Supermercado">
               </div>
               <div>
                 <label class="block text-sm text-gray-400 mb-2">Descricao</label>
@@ -1149,17 +1048,6 @@
               <div>
                 <label class="block text-sm text-gray-400 mb-2">Valor (MT)</label>
                 <input type="number" name="valor" class="input-field" placeholder="0" step="0.01" required>
-              </div>
-              <div>
-                <label class="block text-sm text-gray-400 mb-2">Metodo de Pagamento</label>
-                <select name="metodo" class="input-field" required>
-                  <option value="">Selecione</option>
-                  <option value="Transferencia">Transferencia Bancaria</option>
-                  <option value="Dinheiro">Dinheiro</option>
-                  <option value="M-Pesa">M-Pesa</option>
-                  <option value="e-Mola">e-Mola</option>
-                  <option value="Cartao">Cartao</option>
-                </select>
               </div>
               <div>
                 <label class="block text-sm text-gray-400 mb-2">Data</label>
@@ -1182,17 +1070,17 @@
                 <input type="text" name="cliente" class="input-field" placeholder="Nome completo" required>
               </div>
               <div>
-                <label class="block text-sm text-gray-400 mb-2">Valor Inicial (MT)</label>
-                <input type="number" name="valor_inicial" class="input-field" placeholder="0" step="0.01" required>
+                <label class="block text-sm text-gray-400 mb-2">Valor a Emprestar (MT)</label>
+                <input type="number" name="valor_inicial" class="input-field" placeholder="Ex: 1000" step="0.01" required>
               </div>
               <div>
                 <label class="block text-sm text-gray-400 mb-2">Taxa de Juros Mensal</label>
                 <select name="taxa_juros" class="input-field" required>
-                  <option value="">Selecione</option>
-                  <option value="20">20%</option>
-                  <option value="30">30%</option>
-                  <option value="40">40%</option>
-                  <option value="50">50%</option>
+                  <option value="">Selecione a taxa</option>
+                  <option value="20">20% ao mes</option>
+                  <option value="30">30% ao mes</option>
+                  <option value="40">40% ao mes</option>
+                  <option value="50">50% ao mes</option>
                 </select>
               </div>
               <div>
@@ -1200,22 +1088,35 @@
                 <input type="date" name="data_inicio" class="input-field" value="${new Date().toISOString().split('T')[0]}" required>
               </div>
               <div class="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
-                <p class="text-sm text-amber-400">Os juros sao aplicados mensalmente sobre o saldo devedor. Se nao houver pagamento, os juros acumulam.</p>
+                <p class="text-sm text-amber-400 font-medium mb-2">Calculo de Juros:</p>
+                <p class="text-xs text-gray-400">Valor + (Valor x Taxa) = Saldo no mes seguinte</p>
+                <p class="text-xs text-gray-400 mt-1">Exemplo: 1000 + 30% = 1300 MT</p>
               </div>
               <div class="flex gap-4 pt-4">
                 <button type="button" class="btn-secondary flex-1" onclick="closeModal()">Cancelar</button>
-                <button type="submit" class="btn-primary flex-1">Salvar</button>
+                <button type="submit" class="btn-primary flex-1">Registar Emprestimo</button>
               </div>
             </form>
           `;
           break;
 
         case 'pagamento':
-          const emprestimoId = arguments[1];
+          // Get current loan balance
+          const empData = db.exec(`SELECT cliente, saldo_atual, taxa_juros FROM emprestimos WHERE id = ${id}`);
+          const cliente = empData[0].values[0][0];
+          const saldoAtual = empData[0].values[0][1];
+          const taxa = empData[0].values[0][2];
+          
           html = `
-            <h3 class="text-xl font-bold mb-6">Registrar Pagamento</h3>
+            <h3 class="text-xl font-bold mb-6">Receber Pagamento</h3>
+            <div class="p-4 bg-gray-800 rounded-xl mb-6">
+              <p class="text-sm text-gray-400">Cliente: <span class="text-white font-medium">${cliente}</span></p>
+              <p class="text-sm text-gray-400">Saldo Devedor: <span class="text-amber-400 font-bold">${formatCurrency(saldoAtual)}</span></p>
+              <p class="text-sm text-gray-400">Taxa: <span class="text-white">${taxa}%</span></p>
+            </div>
             <form id="formPagamento" class="space-y-4">
-              <input type="hidden" name="emprestimo_id" value="${emprestimoId}">
+              <input type="hidden" name="emprestimo_id" value="${id}">
+              <input type="hidden" name="saldo_atual" value="${saldoAtual}">
               <div>
                 <label class="block text-sm text-gray-400 mb-2">Valor do Pagamento (MT)</label>
                 <input type="number" name="valor_pago" class="input-field" placeholder="0" step="0.01" required>
@@ -1224,9 +1125,12 @@
                 <label class="block text-sm text-gray-400 mb-2">Data do Pagamento</label>
                 <input type="date" name="data_pagamento" class="input-field" value="${new Date().toISOString().split('T')[0]}" required>
               </div>
+              <div class="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
+                <p class="text-sm text-emerald-400">O pagamento sera deduzido do saldo devedor atual.</p>
+              </div>
               <div class="flex gap-4 pt-4">
                 <button type="button" class="btn-secondary flex-1" onclick="closeModal()">Cancelar</button>
-                <button type="submit" class="btn-primary flex-1">Registrar</button>
+                <button type="submit" class="btn-primary flex-1">Registrar Pagamento</button>
               </div>
             </form>
           `;
@@ -1242,35 +1146,15 @@
               </div>
               <div>
                 <label class="block text-sm text-gray-400 mb-2">Credor</label>
-                <input type="text" name="credor" class="input-field" placeholder="Ex: Banco BIM" required>
+                <input type="text" name="credor" class="input-field" placeholder="Ex: Banco" required>
               </div>
               <div>
                 <label class="block text-sm text-gray-400 mb-2">Valor Total (MT)</label>
                 <input type="number" name="valor_total" class="input-field" placeholder="0" step="0.01" required>
               </div>
               <div>
-                <label class="block text-sm text-gray-400 mb-2">Taxa de Juros (%)</label>
-                <input type="number" name="taxa_juros" class="input-field" placeholder="0" step="0.01">
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-sm text-gray-400 mb-2">Num. Parcelas</label>
-                  <input type="number" name="num_parcelas" class="input-field" placeholder="12" required>
-                </div>
-                <div>
-                  <label class="block text-sm text-gray-400 mb-2">Valor Parcela (MT)</label>
-                  <input type="number" name="valor_parcela" class="input-field" placeholder="0" step="0.01" required>
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-sm text-gray-400 mb-2">Data de Inicio</label>
-                  <input type="date" name="data_inicio" class="input-field" value="${new Date().toISOString().split('T')[0]}" required>
-                </div>
-                <div>
-                  <label class="block text-sm text-gray-400 mb-2">Data de Vencimento</label>
-                  <input type="date" name="data_vencimento" class="input-field" required>
-                </div>
+                <label class="block text-sm text-gray-400 mb-2">Data de Vencimento</label>
+                <input type="date" name="data_vencimento" class="input-field" required>
               </div>
               <div class="flex gap-4 pt-4">
                 <button type="button" class="btn-secondary flex-1" onclick="closeModal()">Cancelar</button>
@@ -1393,7 +1277,7 @@
       db.run(`
         INSERT INTO receitas (valor, fonte, categoria, metodo, data, observacao)
         VALUES (?, ?, ?, ?, ?, ?)
-      `, [data.valor, data.fonte, data.categoria, data.metodo, data.data, data.observacao || '']);
+      `, [data.valor, data.fonte, data.categoria, data.metodo, data.data, '']);
       
       closeModal();
       showToast('Receita registrada com sucesso!', 'success');
@@ -1402,9 +1286,9 @@
 
     function saveDespesa(data) {
       db.run(`
-        INSERT INTO despesas (valor, categoria, subcategoria, descricao, metodo, data)
-        VALUES (?, ?, ?, ?, ?, ?)
-      `, [data.valor, data.categoria, data.subcategoria || '', data.descricao, data.metodo, data.data]);
+        INSERT INTO despesas (valor, categoria, descricao, metodo, data)
+        VALUES (?, ?, ?, ?, ?)
+      `, [data.valor, data.categoria, data.descricao, '', data.data]);
       
       closeModal();
       showToast('Despesa registrada com sucesso!', 'success');
@@ -1413,18 +1297,19 @@
 
     function saveEmprestimo(data) {
       db.run(`
-        INSERT INTO emprestimos (cliente, valor_inicial, taxa_juros, saldo_atual, data_inicio, status, ultimo_calculo)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `, [data.cliente, data.valor_inicial, data.taxa_juros, data.valor_inicial, data.data_inicio, 'ativo', data.data_inicio]);
+        INSERT INTO emprestimos (cliente, valor_inicial, taxa_juros, saldo_atual, data_inicio, status)
+        VALUES (?, ?, ?, ?, ?, 'ativo')
+      `, [data.cliente, data.valor_inicial, data.taxa_juros, data.valor_inicial, data.data_inicio]);
       
       closeModal();
-      showToast('Emprestimo registrado com sucesso!', 'success');
+      showToast('Emprestimo registrado! O cliente deve ' + formatCurrency(data.valor_inicial), 'success');
       refreshAll();
     }
 
     function savePagamento(data) {
       const emprestimoId = parseInt(data.emprestimo_id);
       const valorPago = parseFloat(data.valor_pago);
+      const saldoAtual = parseFloat(data.saldo_atual);
 
       // Register payment
       db.run(`
@@ -1432,27 +1317,53 @@
         VALUES (?, ?, ?)
       `, [emprestimoId, valorPago, data.data_pagamento]);
 
-      // Update loan balance
-      const emprestimo = db.exec(`SELECT saldo_atual FROM emprestimos WHERE id = ${emprestimoId}`);
-      const saldoAtual = emprestimo[0].values[0][0];
+      // Calculate new balance
       const novoSaldo = Math.max(0, saldoAtual - valorPago);
 
       if (novoSaldo <= 0) {
         db.run(`UPDATE emprestimos SET saldo_atual = 0, status = 'pago' WHERE id = ${emprestimoId}`);
+        showToast('Divida completamente paga!', 'success');
       } else {
         db.run(`UPDATE emprestimos SET saldo_atual = ${novoSaldo} WHERE id = ${emprestimoId}`);
+        showToast(`Pagamento registrado! Saldo restante: ${formatCurrency(novoSaldo)}`, 'success');
       }
       
       closeModal();
-      showToast('Pagamento registrado com sucesso!', 'success');
+      refreshAll();
+    }
+
+    // APLICAR JUROS - Funcao principal
+    function aplicarJurosEmprestimo(id) {
+      const emp = db.exec(`SELECT cliente, saldo_atual, taxa_juros FROM emprestimos WHERE id = ${id}`);
+      
+      if (!emp[0] || emp[0].values.length === 0) return;
+      
+      const cliente = emp[0].values[0][0];
+      const saldoAtual = emp[0].values[0][1];
+      const taxa = emp[0].values[0][2] / 100;
+      
+      // Calcular novo saldo: Saldo + (Saldo x Taxa)
+      const juros = saldoAtual * taxa;
+      const novoSaldo = saldoAtual + juros;
+      
+      // Registrar no historico
+      db.run(`
+        INSERT INTO historico_juros (emprestimo_id, saldo_antes, juros_aplicado, saldo_depois, data_aplicacao)
+        VALUES (?, ?, ?, ?, ?)
+      `, [id, saldoAtual, juros, novoSaldo, new Date().toISOString().split('T')[0]]);
+      
+      // Atualizar saldo
+      db.run(`UPDATE emprestimos SET saldo_atual = ? WHERE id = ?`, [novoSaldo, id]);
+      
+      showToast(`Juros de ${formatCurrency(juros)} aplicados para ${cliente}. Novo saldo: ${formatCurrency(novoSaldo)}`, 'warning');
       refreshAll();
     }
 
     function saveDivida(data) {
       db.run(`
-        INSERT INTO dividas (nome, credor, valor_total, taxa_juros, num_parcelas, valor_parcela, parcelas_pagas, data_inicio, data_vencimento, status)
-        VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?, 'pendente')
-      `, [data.nome, data.credor, data.valor_total, data.taxa_juros || 0, data.num_parcelas, data.valor_parcela, data.data_inicio, data.data_vencimento]);
+        INSERT INTO dividas (nome, credor, valor_total, data_vencimento, status)
+        VALUES (?, ?, ?, ?, 'pendente')
+      `, [data.nome, data.credor, data.valor_total, data.data_vencimento]);
       
       closeModal();
       showToast('Divida registrada com sucesso!', 'success');
@@ -1499,9 +1410,10 @@
     }
 
     function deleteEmprestimo(id) {
-      if (confirm('Tem certeza que deseja excluir este emprestimo?')) {
+      if (confirm('Tem certeza que deseja excluir este emprestimo e todo seu historico?')) {
         db.run(`DELETE FROM emprestimos WHERE id = ${id}`);
         db.run(`DELETE FROM pagamentos WHERE emprestimo_id = ${id}`);
+        db.run(`DELETE FROM historico_juros WHERE emprestimo_id = ${id}`);
         showToast('Emprestimo excluido!', 'success');
         refreshAll();
       }
@@ -1531,35 +1443,9 @@
       }
     }
 
-    // Apply interest to loans
-    function aplicarJuros() {
-      const hoje = new Date();
-      const mesAtual = hoje.getMonth();
-      const anoAtual = hoje.getFullYear();
-
-      const emprestimos = db.exec(`SELECT id, saldo_atual, taxa_juros, ultimo_calculo FROM emprestimos WHERE status = 'ativo'`);
-      
-      if (emprestimos.length === 0 || emprestimos[0].values.length === 0) return;
-
-      emprestimos[0].values.forEach(emp => {
-        const id = emp[0];
-        const saldoAtual = emp[1];
-        const taxa = emp[2] / 100;
-        const ultimoCalculo = new Date(emp[3]);
-
-        // Check if interest was already applied this month
-        if (ultimoCalculo.getMonth() !== mesAtual || ultimoCalculo.getFullYear() !== anoAtual) {
-          const novoSaldo = saldoAtual * (1 + taxa);
-          db.run(`UPDATE emprestimos SET saldo_atual = ?, ultimo_calculo = ? WHERE id = ?`, [novoSaldo, hoje.toISOString().split('T')[0], id]);
-        }
-      });
-    }
-
     // Refresh all data
     function refreshAll() {
       if (!db) return;
-
-      aplicarJuros();
       updateDashboard();
       updateReceitas();
       updateDespesas();
@@ -1567,7 +1453,6 @@
       updateDividas();
       updatePoupancas();
       updateMetas();
-      updateAlertas();
       updateRelatorios();
     }
 
@@ -1594,13 +1479,11 @@
       document.getElementById('statDespesas').textContent = formatCurrency(totalDespesas);
       document.getElementById('statEmprestado').textContent = formatCurrency(totalAReceber);
 
-      // Update charts
       updateCharts();
       updateRecentTransactions();
     }
 
     function updateCharts() {
-      // Monthly flow chart
       const receitas = db.exec("SELECT strftime('%m', data) as mes, SUM(valor) FROM receitas GROUP BY mes ORDER BY mes");
       const despesas = db.exec("SELECT strftime('%m', data) as mes, SUM(valor) FROM despesas GROUP BY mes ORDER BY mes");
 
@@ -1624,9 +1507,7 @@
 
       const ctxFluxo = document.getElementById('fluxoChart').getContext('2d');
       
-      if (fluxoChart) {
-        fluxoChart.destroy();
-      }
+      if (fluxoChart) fluxoChart.destroy();
 
       fluxoChart = new Chart(ctxFluxo, {
         type: 'line',
@@ -1653,32 +1534,19 @@
         },
         options: {
           responsive: true,
-          plugins: {
-            legend: {
-              labels: { color: '#8a9a8f' }
-            }
-          },
+          plugins: { legend: { labels: { color: '#8a9a8f' } } },
           scales: {
-            x: {
-              ticks: { color: '#8a9a8f' },
-              grid: { color: 'rgba(255,255,255,0.05)' }
-            },
-            y: {
-              ticks: { color: '#8a9a8f' },
-              grid: { color: 'rgba(255,255,255,0.05)' }
-            }
+            x: { ticks: { color: '#8a9a8f' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+            y: { ticks: { color: '#8a9a8f' }, grid: { color: 'rgba(255,255,255,0.05)' } }
           }
         }
       });
 
       // Expenses by category chart
       const despesasCategoria = db.exec("SELECT categoria, SUM(valor) FROM despesas GROUP BY categoria");
-
       const ctxDespesas = document.getElementById('despesasChart').getContext('2d');
       
-      if (despesasChart) {
-        despesasChart.destroy();
-      }
+      if (despesasChart) despesasChart.destroy();
 
       const categorias = despesasCategoria[0]?.values.map(c => c[0]) || [];
       const valores = despesasCategoria[0]?.values.map(c => c[1]) || [];
@@ -1689,40 +1557,25 @@
           labels: categorias.length > 0 ? categorias : ['Sem dados'],
           datasets: [{
             data: valores.length > 0 ? valores : [1],
-            backgroundColor: [
-              '#c9a227', '#10b981', '#ef4444', '#f59e0b', '#3b82f6',
-              '#8b5cf6', '#ec4899', '#14b8a6', '#f97316', '#6366f1'
-            ],
+            backgroundColor: ['#c9a227', '#10b981', '#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6'],
             borderWidth: 0
           }]
         },
         options: {
           responsive: true,
-          plugins: {
-            legend: {
-              position: 'right',
-              labels: { color: '#8a9a8f' }
-            }
-          }
+          plugins: { legend: { position: 'right', labels: { color: '#8a9a8f' } } }
         }
       });
     }
 
     function updateRecentTransactions() {
       const tbody = document.getElementById('recentTransactions');
-      
       const receitas = db.exec("SELECT data, fonte, categoria, 'receita' as tipo, valor FROM receitas ORDER BY data DESC LIMIT 5");
       const despesas = db.exec("SELECT data, descricao, categoria, 'despesa' as tipo, valor FROM despesas ORDER BY data DESC LIMIT 5");
 
       let transactions = [];
-      
-      if (receitas[0]) {
-        transactions = transactions.concat(receitas[0].values);
-      }
-      if (despesas[0]) {
-        transactions = transactions.concat(despesas[0].values);
-      }
-
+      if (receitas[0]) transactions = transactions.concat(receitas[0].values);
+      if (despesas[0]) transactions = transactions.concat(despesas[0].values);
       transactions.sort((a, b) => new Date(b[0]) - new Date(a[0]));
 
       if (transactions.length === 0) {
@@ -1741,7 +1594,6 @@
       `).join('');
     }
 
-    // Update Receitas table
     function updateReceitas() {
       const tbody = document.getElementById('receitasTable');
       const receitas = db.exec("SELECT id, data, fonte, categoria, metodo, valor FROM receitas ORDER BY data DESC");
@@ -1769,13 +1621,12 @@
       `).join('');
     }
 
-    // Update Despesas table
     function updateDespesas() {
       const tbody = document.getElementById('despesasTable');
-      const despesas = db.exec("SELECT id, data, categoria, subcategoria, descricao, valor FROM despesas ORDER BY data DESC");
+      const despesas = db.exec("SELECT id, data, categoria, descricao, valor FROM despesas ORDER BY data DESC");
 
       if (!despesas[0] || despesas[0].values.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500 py-8">Nenhuma despesa registrada</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-500 py-8">Nenhuma despesa registrada</td></tr>';
         return;
       }
 
@@ -1783,9 +1634,8 @@
         <tr>
           <td>${formatDate(d[1])}</td>
           <td><span class="badge badge-warning">${d[2]}</span></td>
-          <td>${d[3] || '-'}</td>
-          <td>${d[4]}</td>
-          <td class="text-red-400 font-semibold">${formatCurrency(d[5])}</td>
+          <td>${d[3]}</td>
+          <td class="text-red-400 font-semibold">${formatCurrency(d[4])}</td>
           <td>
             <button onclick="deleteDespesa(${d[0]})" class="text-red-400 hover:text-red-300">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1797,21 +1647,21 @@
       `).join('');
     }
 
-    // Update Emprestimos
+    // Update Emprestimos - COM LOGICA DE JUROS ROTATIVOS
     function updateEmprestimos() {
       const tbody = document.getElementById('emprestimosTable');
       const emprestimos = db.exec("SELECT id, cliente, valor_inicial, taxa_juros, saldo_atual, data_inicio, status FROM emprestimos ORDER BY data_inicio DESC");
 
-      const totalEmprestado = db.exec("SELECT SUM(valor_inicial) FROM emprestimos WHERE status = 'ativo'");
+      const totalInicial = db.exec("SELECT SUM(valor_inicial) FROM emprestimos WHERE status = 'ativo'");
       const totalReceber = db.exec("SELECT SUM(saldo_atual) FROM emprestimos WHERE status = 'ativo'");
       
-      const valorEmprestado = totalEmprestado[0]?.values[0][0] || 0;
-      const valorReceber = totalReceber[0]?.values[0][0] || 0;
-      const jurosAcumulados = valorReceber - valorEmprestado;
+      const vInicial = totalInicial[0]?.values[0][0] || 0;
+      const vReceber = totalReceber[0]?.values[0][0] || 0;
+      const juros = vReceber - vInicial;
 
-      document.getElementById('totalEmprestado').textContent = formatCurrency(valorEmprestado);
-      document.getElementById('totalReceber').textContent = formatCurrency(valorReceber);
-      document.getElementById('totalJuros').textContent = formatCurrency(Math.max(0, jurosAcumulados));
+      document.getElementById('totalEmprestado').textContent = formatCurrency(vInicial);
+      document.getElementById('totalReceber').textContent = formatCurrency(vReceber);
+      document.getElementById('totalJuros').textContent = formatCurrency(Math.max(0, juros));
 
       if (!emprestimos[0] || emprestimos[0].values.length === 0) {
         tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-500 py-8">Nenhum emprestimo registrado</td></tr>';
@@ -1819,24 +1669,25 @@
       }
 
       tbody.innerHTML = emprestimos[0].values.map(e => `
-        <tr>
+        <tr class="${e[6] === 'ativo' ? 'loan-highlight' : ''}">
           <td class="font-medium">${e[1]}</td>
           <td>${formatCurrency(e[2])}</td>
           <td><span class="badge badge-warning">${e[3]}%</span></td>
-          <td class="text-amber-400 font-semibold">${formatCurrency(e[4])}</td>
+          <td class="text-amber-400 font-bold text-lg">${formatCurrency(e[4])}</td>
           <td>${formatDate(e[5])}</td>
           <td><span class="badge ${e[6] === 'ativo' ? 'badge-success' : 'badge-info'}">${e[6] === 'ativo' ? 'Ativo' : 'Pago'}</span></td>
           <td>
             <div class="flex gap-2">
               ${e[6] === 'ativo' ? `
-                <button onclick="openModal('pagamento', ${e[0]})" class="text-emerald-400 hover:text-emerald-300" title="Registrar pagamento">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z"/>
-                  </svg>
+                <button onclick="aplicarJurosEmprestimo(${e[0]})" class="btn-secondary text-xs px-3 py-2" title="Aplicar juros do mes">
+                  Aplicar Juros
+                </button>
+                <button onclick="openModal('pagamento', ${e[0]})" class="btn-primary text-xs px-3 py-2" title="Receber pagamento">
+                  Receber
                 </button>
               ` : ''}
-              <button onclick="deleteEmprestimo(${e[0]})" class="text-red-400 hover:text-red-300" title="Excluir">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button onclick="deleteEmprestimo(${e[0]})" class="btn-danger text-xs px-3 py-2" title="Excluir">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                 </svg>
               </button>
@@ -1846,13 +1697,12 @@
       `).join('');
     }
 
-    // Update Dividas
     function updateDividas() {
       const tbody = document.getElementById('dividasTable');
-      const dividas = db.exec("SELECT id, nome, credor, valor_total, num_parcelas, valor_parcela, parcelas_pagas, data_vencimento, status FROM dividas ORDER BY data_vencimento");
+      const dividas = db.exec("SELECT id, nome, credor, valor_total, data_vencimento, status FROM dividas ORDER BY data_vencimento");
 
       if (!dividas[0] || dividas[0].values.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-500 py-8">Nenhuma divida registrada</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500 py-8">Nenhuma divida registrada</td></tr>';
         return;
       }
 
@@ -1861,18 +1711,17 @@
           <td class="font-medium">${d[1]}</td>
           <td>${d[2]}</td>
           <td class="text-red-400 font-semibold">${formatCurrency(d[3])}</td>
-          <td>${d[7]}/${d[4]}</td>
-          <td>${formatDate(d[8])}</td>
-          <td><span class="badge ${d[9] === 'pendente' ? 'badge-warning' : 'badge-success'}">${d[9] === 'pendente' ? 'Pendente' : 'Pago'}</span></td>
+          <td>${formatDate(d[4])}</td>
+          <td><span class="badge ${d[5] === 'pendente' ? 'badge-warning' : 'badge-success'}">${d[5] === 'pendente' ? 'Pendente' : 'Pago'}</span></td>
           <td>
             <div class="flex gap-2">
-              <button onclick="pagarParcela(${d[0]})" class="text-emerald-400 hover:text-emerald-300" title="Pagar parcela">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-              </button>
-              <button onclick="deleteDivida(${d[0]})" class="text-red-400 hover:text-red-300" title="Excluir">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              ${d[5] === 'pendente' ? `
+                <button onclick="pagarDivida(${d[0]})" class="btn-primary text-xs px-3 py-2">
+                  Pagar
+                </button>
+              ` : ''}
+              <button onclick="deleteDivida(${d[0]})" class="btn-danger text-xs px-3 py-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                 </svg>
               </button>
@@ -1882,22 +1731,14 @@
       `).join('');
     }
 
-    function pagarParcela(id) {
-      const divida = db.exec(`SELECT num_parcelas, parcelas_pagas FROM dividas WHERE id = ${id}`);
-      const numParcelas = divida[0].values[0][0];
-      const parcelasPagas = divida[0].values[0][1] + 1;
-
-      if (parcelasPagas >= numParcelas) {
-        db.run(`UPDATE dividas SET parcelas_pagas = ${parcelasPagas}, status = 'pago' WHERE id = ${id}`);
-        showToast('Divida totalmente paga!', 'success');
-      } else {
-        db.run(`UPDATE dividas SET parcelas_pagas = ${parcelasPagas} WHERE id = ${id}`);
-        showToast('Parcela paga!', 'success');
+    function pagarDivida(id) {
+      if (confirm('Marcar esta divida como paga?')) {
+        db.run(`UPDATE dividas SET status = 'pago' WHERE id = ${id}`);
+        showToast('Divida marcada como paga!', 'success');
+        refreshAll();
       }
-      refreshAll();
     }
 
-    // Update Poupancas
     function updatePoupancas() {
       const grid = document.getElementById('poupancasGrid');
       const poupancas = db.exec("SELECT id, conta, valor, data FROM poupancas ORDER BY data DESC");
@@ -1923,7 +1764,6 @@
       `).join('');
     }
 
-    // Update Metas
     function updateMetas() {
       const grid = document.getElementById('metasGrid');
       const metas = db.exec("SELECT id, nome, valor_meta, valor_atual, prazo FROM metas ORDER BY prazo");
@@ -1935,7 +1775,6 @@
 
       grid.innerHTML = metas[0].values.map(m => {
         const progresso = Math.min(100, (m[3] / m[2]) * 100);
-        const diasRestantes = Math.ceil((new Date(m[4]) - new Date()) / (1000 * 60 * 60 * 24));
 
         return `
           <div class="card p-6">
@@ -1966,101 +1805,11 @@
                 <p class="font-semibold">${formatCurrency(m[2])}</p>
               </div>
             </div>
-            <div class="mt-4 pt-4 border-t border-gray-700 flex justify-between items-center">
-              <span class="text-sm text-gray-500">${diasRestantes > 0 ? `${diasRestantes} dias restantes` : 'Prazo expirado'}</span>
-              <button onclick="adicionarMeta(${m[0]})" class="text-amber-400 text-sm hover:underline">Adicionar</button>
-            </div>
           </div>
         `;
       }).join('');
     }
 
-    function adicionarMeta(id) {
-      const valor = prompt('Quanto deseja adicionar a esta meta?');
-      if (valor && !isNaN(valor)) {
-        const meta = db.exec(`SELECT valor_atual FROM metas WHERE id = ${id}`);
-        const valorAtual = meta[0].values[0][0];
-        const novoValor = valorAtual + parseFloat(valor);
-        db.run(`UPDATE metas SET valor_atual = ${novoValor} WHERE id = ${id}`);
-        showToast('Valor adicionado a meta!', 'success');
-        refreshAll();
-      }
-    }
-
-    // Update Alertas
-    function updateAlertas() {
-      const alertasList = document.getElementById('alertasList');
-      const alertas = [];
-
-      // Check for due debts
-      const dividasVencendo = db.exec(`
-        SELECT nome, data_vencimento, valor_parcela 
-        FROM dividas 
-        WHERE status = 'pendente' 
-        AND date(data_vencimento) BETWEEN date('now') AND date('now', '+7 days')
-      `);
-
-      if (dividasVencendo[0]) {
-        dividasVencendo[0].values.forEach(d => {
-          alertas.push({
-            tipo: 'warning',
-            titulo: 'Divida proxima do vencimento',
-            mensagem: `${d[0]} vence em ${formatDate(d[1])} - Parcela: ${formatCurrency(d[2])}`
-          });
-        });
-      }
-
-      // Check loan payments
-      const emprestimosAtivos = db.exec(`
-        SELECT cliente, saldo_atual 
-        FROM emprestimos 
-        WHERE status = 'ativo'
-      `);
-
-      if (emprestimosAtivos[0]) {
-        emprestimosAtivos[0].values.forEach(e => {
-          alertas.push({
-            tipo: 'info',
-            titulo: 'Emprestimo ativo',
-            mensagem: `${e[0]} deve ${formatCurrency(e[1])}`
-          });
-        });
-      }
-
-      // Check low balance
-      const receitas = db.exec("SELECT SUM(valor) FROM receitas");
-      const despesas = db.exec("SELECT SUM(valor) FROM despesas");
-      const saldo = (receitas[0]?.values[0][0] || 0) - (despesas[0]?.values[0][0] || 0);
-
-      if (saldo < 5000) {
-        alertas.push({
-          tipo: 'danger',
-          titulo: 'Saldo baixo',
-          mensagem: `Seu saldo atual e de ${formatCurrency(saldo)}`
-        });
-      }
-
-      if (alertas.length === 0) {
-        alertasList.innerHTML = '<div class="card p-6 text-center"><p class="text-gray-500">Nenhum alerta no momento</p></div>';
-        return;
-      }
-
-      alertasList.innerHTML = alertas.map(a => `
-        <div class="card p-6 flex items-start gap-4">
-          <div class="w-10 h-10 rounded-xl flex items-center justify-center ${a.tipo === 'danger' ? 'bg-red-500/20' : a.tipo === 'warning' ? 'bg-amber-500/20' : 'bg-blue-500/20'}">
-            <svg class="w-5 h-5 ${a.tipo === 'danger' ? 'text-red-400' : a.tipo === 'warning' ? 'text-amber-400' : 'text-blue-400'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold">${a.titulo}</h4>
-            <p class="text-sm text-gray-400">${a.mensagem}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Update Relatorios
     function updateRelatorios() {
       const receitas = db.exec("SELECT SUM(valor) FROM receitas");
       const despesas = db.exec("SELECT SUM(valor) FROM despesas");
@@ -2073,12 +1822,9 @@
       document.getElementById('relDespesas').textContent = formatCurrency(totalDespesas);
       document.getElementById('relBalanco').textContent = formatCurrency(balanco);
 
-      // Update report chart
       const ctxRelatorio = document.getElementById('relatorioChart').getContext('2d');
       
-      if (relatorioChart) {
-        relatorioChart.destroy();
-      }
+      if (relatorioChart) relatorioChart.destroy();
 
       relatorioChart = new Chart(ctxRelatorio, {
         type: 'bar',
@@ -2092,30 +1838,14 @@
         },
         options: {
           responsive: true,
-          plugins: {
-            legend: { display: false }
-          },
+          plugins: { legend: { display: false } },
           scales: {
-            x: {
-              ticks: { color: '#8a9a8f' },
-              grid: { display: false }
-            },
-            y: {
-              ticks: { color: '#8a9a8f' },
-              grid: { color: 'rgba(255,255,255,0.05)' }
-            }
+            x: { ticks: { color: '#8a9a8f' }, grid: { display: false } },
+            y: { ticks: { color: '#8a9a8f' }, grid: { color: 'rgba(255,255,255,0.05)' } }
           }
         }
       });
     }
-
-    // Tab switching for reports
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      });
-    });
 
     // Export CSV
     function exportCSV() {
@@ -2126,26 +1856,17 @@
       const receitas = db.exec("SELECT 'Receita', data, fonte, categoria, valor FROM receitas");
       const despesas = db.exec("SELECT 'Despesa', data, descricao, categoria, valor FROM despesas");
 
-      if (receitas[0]) {
-        receitas[0].values.forEach(r => {
-          csv += r.join(',') + '\n';
-        });
-      }
-
-      if (despesas[0]) {
-        despesas[0].values.forEach(d => {
-          csv += d.join(',') + '\n';
-        });
-      }
+      if (receitas[0]) receitas[0].values.forEach(r => { csv += r.join(',') + '\n'; });
+      if (despesas[0]) despesas[0].values.forEach(d => { csv += d.join(',') + '\n'; });
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `micten_vic_relatorio_${new Date().toISOString().split('T')[0]}.csv`;
+      link.download = `micten_vic_${new Date().toISOString().split('T')[0]}.csv`;
       link.click();
 
-      showToast('Relatorio exportado com sucesso!', 'success');
+      showToast('Relatorio exportado!', 'success');
     }
 
     // Initialize on page load
@@ -2153,9 +1874,7 @@
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeModal();
-      }
+      if (e.key === 'Escape') closeModal();
     });
   </script>
 </body>
