@@ -1,46 +1,2162 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta property="og:title" content="Micten" />
-    <meta property="og:description" content="Gestão financeira pessoal completa" />
-    <meta
-      property="og:image"
-      content="https://mocha-cdn.com/og.png"
-      type="image/png"
-    />
-    <meta
-      property="og:url"
-      content="https://getmocha.com"
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:author" content="Micten" />
-    <meta property="og:site_name" content="Micten" />
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:site" content="@get_mocha" />
-    <meta property="twitter:title" content="Micten" />
-    <meta property="twitter:description" content="Gestão financeira pessoal completa" />
-    <meta
-      property="twitter:image"
-      content="https://mocha-cdn.com/og.png"
-      type="image/png"
-    />
-    <link
-      rel="shortcut icon"
-      href="https://mocha-cdn.com/favicon.ico"
-      type="image/x-icon"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="https://mocha-cdn.com/apple-touch-icon.png"
-      type="image/png"
-    />
-    <title>Micten - Gestão Financeira</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/react-app/main.tsx"></script>
-  </body>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Micten Vic - Gestao Financeira</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0f0d;
+      --bg-secondary: #111916;
+      --bg-card: #151d19;
+      --bg-elevated: #1a2420;
+      --accent-gold: #c9a227;
+      --accent-gold-light: #e8c547;
+      --accent-emerald: #10b981;
+      --accent-emerald-dark: #059669;
+      --text-primary: #f0f5f2;
+      --text-secondary: #8a9a8f;
+      --text-muted: #5a6a5f;
+      --border: #2a3a30;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --success: #10b981;
+    }
+
+    * { box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .bg-grid {
+      background-image: 
+        linear-gradient(rgba(201, 162, 39, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201, 162, 39, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    .glow-gold {
+      box-shadow: 0 0 40px rgba(201, 162, 39, 0.15);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(201, 162, 39, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
+      color: var(--bg-primary);
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(201, 162, 39, 0.3);
+    }
+
+    .btn-secondary {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      padding: 12px 24px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent-gold);
+      background: var(--bg-card);
+    }
+
+    .input-field {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 12px 16px;
+      border-radius: 10px;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1);
+    }
+
+    .input-field::placeholder {
+      color: var(--text-muted);
+    }
+
+    select.input-field {
+      cursor: pointer;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      border-radius: 12px;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nav-item:hover {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(201, 162, 39, 0.15), rgba(201, 162, 39, 0.05));
+      color: var(--accent-gold);
+      border-left: 3px solid var(--accent-gold);
+    }
+
+    .stat-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(201, 162, 39, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(30%, -30%);
+    }
+
+    .badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-success { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+    .badge-warning { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+    .badge-danger { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    .badge-info { background: rgba(201, 162, 39, 0.2); color: var(--accent-gold); }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.9);
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      padding: 16px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:hover td {
+      background: var(--bg-elevated);
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-emerald), var(--accent-gold));
+      border-radius: 10px;
+      transition: width 0.5s ease;
+    }
+
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 16px 24px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideIn 0.3s ease;
+      min-width: 300px;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes fadeUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .animate-fadeUp {
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    .sidebar {
+      width: 280px;
+      min-height: 100vh;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      left: 0;
+      top: 0;
+      padding: 24px;
+      transition: transform 0.3s ease;
+      z-index: 100;
+    }
+
+    .main-content {
+      margin-left: 280px;
+      padding: 32px;
+      min-height: 100vh;
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+    }
+
+    .tab-btn {
+      padding: 12px 24px;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--bg-elevated);
+      color: var(--accent-gold);
+      border-color: var(--border);
+    }
+
+    .tab-btn:hover:not(.active) {
+      color: var(--text-primary);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-grid">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="flex items-center gap-3 mb-10">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center">
+        <svg class="w-7 h-7 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-xl font-bold text-amber-400">Micten Vic</h1>
+        <p class="text-xs text-gray-500">Gestao Financeira</p>
+      </div>
+    </div>
+
+    <nav class="space-y-2">
+      <div class="nav-item active" data-page="dashboard">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+        </svg>
+        <span>Dashboard</span>
+      </div>
+
+      <div class="nav-item" data-page="receitas">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        <span>Receitas</span>
+      </div>
+
+      <div class="nav-item" data-page="despesas">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+        </svg>
+        <span>Despesas</span>
+      </div>
+
+      <div class="nav-item" data-page="emprestimos">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+        <span>Emprestimos</span>
+      </div>
+
+      <div class="nav-item" data-page="dividas">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/>
+        </svg>
+        <span>Dividas</span>
+      </div>
+
+      <div class="nav-item" data-page="poupancas">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+        </svg>
+        <span>Poupancas</span>
+      </div>
+
+      <div class="nav-item" data-page="metas">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+        <span>Metas</span>
+      </div>
+
+      <div class="nav-item" data-page="relatorios">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        <span>Relatorios</span>
+      </div>
+
+      <div class="nav-item" data-page="alertas">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+        <span>Alertas</span>
+      </div>
+    </nav>
+
+    <div class="mt-auto pt-8 border-t border-gray-700 mt-8">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold">
+          U
+        </div>
+        <div>
+          <p class="text-sm font-medium" id="userName">Usuario</p>
+          <p class="text-xs text-gray-500">Versao 1.0</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Menu Toggle -->
+  <button class="fixed top-4 left-4 z-50 lg:hidden p-3 rounded-xl bg-gray-800 border border-gray-700" id="menuToggle">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Dashboard Page -->
+    <section id="page-dashboard" class="page">
+      <header class="mb-8">
+        <h2 class="text-3xl font-bold mb-2">Dashboard</h2>
+        <p class="text-gray-400">Visao geral da sua situacao financeira</p>
+      </header>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="card stat-card p-6 animate-fadeUp" style="animation-delay: 0.1s">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-gray-400 text-sm">Saldo Total</span>
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+              <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-2xl font-bold" id="statSaldo">0 MT</p>
+          <p class="text-xs text-emerald-500 mt-2">Disponivel</p>
+        </div>
+
+        <div class="card stat-card p-6 animate-fadeUp" style="animation-delay: 0.2s">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-gray-400 text-sm">Receitas do Mes</span>
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
+              <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-2xl font-bold" id="statReceitas">0 MT</p>
+          <p class="text-xs text-amber-500 mt-2">Entradas</p>
+        </div>
+
+        <div class="card stat-card p-6 animate-fadeUp" style="animation-delay: 0.3s">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-gray-400 text-sm">Despesas do Mes</span>
+            <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+              <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-2xl font-bold" id="statDespesas">0 MT</p>
+          <p class="text-xs text-red-500 mt-2">Saidas</p>
+        </div>
+
+        <div class="card stat-card p-6 animate-fadeUp" style="animation-delay: 0.4s">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-gray-400 text-sm">Total Emprestado</span>
+            <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
+              <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+              </svg>
+            </div>
+          </div>
+          <p class="text-2xl font-bold" id="statEmprestado">0 MT</p>
+          <p class="text-xs text-blue-500 mt-2">A receber</p>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold mb-4">Fluxo de Caixa Mensal</h3>
+          <canvas id="fluxoChart" height="200"></canvas>
+        </div>
+
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold mb-4">Despesas por Categoria</h3>
+          <canvas id="despesasChart" height="200"></canvas>
+        </div>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="card p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-lg font-semibold">Ultimas Transacoes</h3>
+          <button class="text-amber-500 text-sm hover:underline">Ver todas</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Descricao</th>
+                <th>Categoria</th>
+                <th>Tipo</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+            <tbody id="recentTransactions">
+              <tr>
+                <td colspan="5" class="text-center text-gray-500 py-8">Nenhuma transacao registrada</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Receitas Page -->
+    <section id="page-receitas" class="page hidden">
+      <header class="mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-3xl font-bold mb-2">Receitas</h2>
+          <p class="text-gray-400">Gerencie todas as suas fontes de renda</p>
+        </div>
+        <button class="btn-primary" onclick="openModal('receita')">
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Nova Receita
+          </span>
+        </button>
+      </header>
+
+      <div class="card p-6">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Fonte</th>
+                <th>Categoria</th>
+                <th>Metodo</th>
+                <th>Valor</th>
+                <th>Acoes</th>
+              </tr>
+            </thead>
+            <tbody id="receitasTable">
+              <tr>
+                <td colspan="6" class="text-center text-gray-500 py-8">Nenhuma receita registrada</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Despesas Page -->
+    <section id="page-despesas" class="page hidden">
+      <header class="mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-3xl font-bold mb-2">Despesas</h2>
+          <p class="text-gray-400">Controle todos os seus gastos</p>
+        </div>
+        <button class="btn-primary" onclick="openModal('despesa')">
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Nova Despesa
+          </span>
+        </button>
+      </header>
+
+      <div class="card p-6">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Categoria</th>
+                <th>Subcategoria</th>
+                <th>Descricao</th>
+                <th>Valor</th>
+                <th>Acoes</th>
+              </tr>
+            </thead>
+            <tbody id="despesasTable">
+              <tr>
+                <td colspan="6" class="text-center text-gray-500 py-8">Nenhuma despesa registrada</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Emprestimos Page -->
+    <section id="page-emprestimos" class="page hidden">
+      <header class="mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-3xl font-bold mb-2">Emprestimos</h2>
+          <p class="text-gray-400">Gerencie emprestimos com juros rotativos</p>
+        </div>
+        <button class="btn-primary" onclick="openModal('emprestimo')">
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Novo Emprestimo
+          </span>
+        </button>
+      </header>
+
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="card p-6">
+          <p class="text-gray-400 text-sm mb-2">Total Emprestado</p>
+          <p class="text-2xl font-bold text-amber-400" id="totalEmprestado">0 MT</p>
+        </div>
+        <div class="card p-6">
+          <p class="text-gray-400 text-sm mb-2">Total a Receber</p>
+          <p class="text-2xl font-bold text-emerald-400" id="totalReceber">0 MT</p>
+        </div>
+        <div class="card p-6">
+          <p class="text-gray-400 text-sm mb-2">Juros Acumulados</p>
+          <p class="text-2xl font-bold text-blue-400" id="totalJuros">0 MT</p>
+        </div>
+      </div>
+
+      <div class="card p-6">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Valor Inicial</th>
+                <th>Taxa</th>
+                <th>Saldo Atual</th>
+                <th>Data</th>
+                <th>Status</th>
+                <th>Acoes</th>
+              </tr>
+            </thead>
+            <tbody id="emprestimosTable">
+              <tr>
+                <td colspan="7" class="text-center text-gray-500 py-8">Nenhum emprestimo registrado</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dividas Page -->
+    <section id="page-dividas" class="page hidden">
+      <header class="mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-3xl font-bold mb-2">Dividas</h2>
+          <p class="text-gray-400">Controle suas dividas e pagamentos</p>
+        </div>
+        <button class="btn-primary" onclick="openModal('divida')">
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Nova Divida
+          </span>
+        </button>
+      </header>
+
+      <div class="card p-6">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Credor</th>
+                <th>Valor Total</th>
+                <th>Parcelas</th>
+                <th>Vencimento</th>
+                <th>Status</th>
+                <th>Acoes</th>
+              </tr>
+            </thead>
+            <tbody id="dividasTable">
+              <tr>
+                <td colspan="7" class="text-center text-gray-500 py-8">Nenhuma divida registrada</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Poupancas Page -->
+    <section id="page-poupancas" class="page hidden">
+      <header class="mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-3xl font-bold mb-2">Poupancas</h2>
+          <p class="text-gray-400">Acompanhe suas economias</p>
+        </div>
+        <button class="btn-primary" onclick="openModal('poupanca')">
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Nova Poupanca
+          </span>
+        </button>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="poupancasGrid">
+        <div class="card p-6 text-center">
+          <p class="text-gray-500">Nenhuma poupanca criada</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Metas Page -->
+    <section id="page-metas" class="page hidden">
+      <header class="mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-3xl font-bold mb-2">Metas Financeiras</h2>
+          <p class="text-gray-400">Defina e alcance seus objetivos</p>
+        </div>
+        <button class="btn-primary" onclick="openModal('meta')">
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Nova Meta
+          </span>
+        </button>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="metasGrid">
+        <div class="card p-6 text-center">
+          <p class="text-gray-500">Nenhuma meta definida</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Relatorios Page -->
+    <section id="page-relatorios" class="page hidden">
+      <header class="mb-8">
+        <h2 class="text-3xl font-bold mb-2">Relatorios</h2>
+        <p class="text-gray-400">Analise detalhada das suas financas</p>
+      </header>
+
+      <div class="flex gap-4 mb-6 flex-wrap">
+        <button class="tab-btn active" data-tab="mensal">Mensal</button>
+        <button class="tab-btn" data-tab="anual">Anual</button>
+        <button class="tab-btn" data-tab="emprestimos">Emprestimos</button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold mb-4">Resumo Financeiro</h3>
+          <canvas id="relatorioChart" height="250"></canvas>
+        </div>
+
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold mb-4">Estatisticas</h3>
+          <div class="space-y-4" id="estatisticasRelatorio">
+            <div class="flex justify-between items-center p-4 bg-gray-800 rounded-xl">
+              <span class="text-gray-400">Total Receitas</span>
+              <span class="font-bold text-emerald-400" id="relReceitas">0 MT</span>
+            </div>
+            <div class="flex justify-between items-center p-4 bg-gray-800 rounded-xl">
+              <span class="text-gray-400">Total Despesas</span>
+              <span class="font-bold text-red-400" id="relDespesas">0 MT</span>
+            </div>
+            <div class="flex justify-between items-center p-4 bg-gray-800 rounded-xl">
+              <span class="text-gray-400">Balanco</span>
+              <span class="font-bold text-amber-400" id="relBalanco">0 MT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex gap-4">
+        <button class="btn-secondary" onclick="exportCSV()">
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            Exportar CSV
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Alertas Page -->
+    <section id="page-alertas" class="page hidden">
+      <header class="mb-8">
+        <h2 class="text-3xl font-bold mb-2">Alertas</h2>
+        <p class="text-gray-400">Notificacoes e lembretes importantes</p>
+      </header>
+
+      <div class="space-y-4" id="alertasList">
+        <div class="card p-6 text-center">
+          <p class="text-gray-500">Nenhum alerta no momento</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content" id="modalContent">
+      <!-- Modal content will be injected here -->
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // Initialize variables first
+    let db = null;
+    let fluxoChart = null;
+    let despesasChart = null;
+    let relatorioChart = null;
+
+    // Initialize SQL.js and Database
+    async function initDatabase() {
+      try {
+        const SQL = await initSqlJs({
+          locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
+        });
+
+        db = new SQL.Database();
+
+        // Create tables
+        db.run(`
+          CREATE TABLE IF NOT EXISTS usuarios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT,
+            email TEXT,
+            senha TEXT
+          )
+        `);
+
+        db.run(`
+          CREATE TABLE IF NOT EXISTS receitas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            valor REAL,
+            fonte TEXT,
+            categoria TEXT,
+            metodo TEXT,
+            data DATE,
+            observacao TEXT
+          )
+        `);
+
+        db.run(`
+          CREATE TABLE IF NOT EXISTS despesas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            valor REAL,
+            categoria TEXT,
+            subcategoria TEXT,
+            descricao TEXT,
+            metodo TEXT,
+            data DATE
+          )
+        `);
+
+        db.run(`
+          CREATE TABLE IF NOT EXISTS emprestimos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            cliente TEXT,
+            valor_inicial REAL,
+            taxa_juros INTEGER,
+            saldo_atual REAL,
+            data_inicio DATE,
+            status TEXT,
+            ultimo_calculo DATE
+          )
+        `);
+
+        db.run(`
+          CREATE TABLE IF NOT EXISTS pagamentos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            emprestimo_id INTEGER,
+            valor_pago REAL,
+            data_pagamento DATE,
+            FOREIGN KEY (emprestimo_id) REFERENCES emprestimos(id)
+          )
+        `);
+
+        db.run(`
+          CREATE TABLE IF NOT EXISTS dividas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT,
+            credor TEXT,
+            valor_total REAL,
+            taxa_juros REAL,
+            num_parcelas INTEGER,
+            valor_parcela REAL,
+            parcelas_pagas INTEGER DEFAULT 0,
+            data_inicio DATE,
+            data_vencimento DATE,
+            status TEXT
+          )
+        `);
+
+        db.run(`
+          CREATE TABLE IF NOT EXISTS poupancas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            conta TEXT,
+            valor REAL,
+            data DATE
+          )
+        `);
+
+        db.run(`
+          CREATE TABLE IF NOT EXISTS metas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT,
+            valor_meta REAL,
+            valor_atual REAL,
+            prazo DATE,
+            data_criacao DATE
+          )
+        `);
+
+        db.run(`
+          CREATE TABLE IF NOT EXISTS transacoes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            tipo TEXT,
+            valor REAL,
+            categoria TEXT,
+            descricao TEXT,
+            data DATE
+          )
+        `);
+
+        // Insert default user if not exists
+        const userCheck = db.exec("SELECT COUNT(*) FROM usuarios");
+        if (userCheck[0].values[0][0] === 0) {
+          db.run("INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)", ['Usuario', 'usuario@email.com', '123456']);
+        }
+
+        showToast('Sistema inicializado com sucesso!', 'success');
+        refreshAll();
+        
+      } catch (error) {
+        console.error('Erro ao inicializar banco de dados:', error);
+        showToast('Erro ao carregar banco de dados', 'error');
+      }
+    }
+
+    // Format currency
+    function formatCurrency(value) {
+      const num = Number(value) || 0;
+      return num.toLocaleString('pt-MZ') + ' MT';
+    }
+
+    // Format date
+    function formatDate(dateStr) {
+      if (!dateStr) return '-';
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('pt-MZ');
+    }
+
+    // Show toast notification
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      
+      const colors = {
+        success: '#10b981',
+        error: '#ef4444',
+        warning: '#f59e0b',
+        info: '#c9a227'
+      };
+
+      toast.innerHTML = `
+        <div style="width: 4px; height: 40px; background: ${colors[type]}; border-radius: 2px;"></div>
+        <span>${message}</span>
+      `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Navigation
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const page = item.dataset.page;
+        
+        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+        item.classList.add('active');
+        
+        document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+        document.getElementById(`page-${page}`).classList.remove('hidden');
+
+        // Close mobile menu
+        document.getElementById('sidebar').classList.remove('open');
+      });
+    });
+
+    // Mobile menu toggle
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    // Modal functions
+    function openModal(type) {
+      const modal = document.getElementById('modalOverlay');
+      const content = document.getElementById('modalContent');
+
+      let html = '';
+
+      switch(type) {
+        case 'receita':
+          html = `
+            <h3 class="text-xl font-bold mb-6">Nova Receita</h3>
+            <form id="formReceita" class="space-y-4">
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Fonte</label>
+                <input type="text" name="fonte" class="input-field" placeholder="Ex: Salario" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Categoria</label>
+                <select name="categoria" class="input-field" required>
+                  <option value="">Selecione</option>
+                  <option value="Salario">Salario</option>
+                  <option value="Negocios">Negocios</option>
+                  <option value="Freelance">Freelance</option>
+                  <option value="Investimentos">Investimentos</option>
+                  <option value="Bonus">Bonus</option>
+                  <option value="Outros">Outros</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Valor (MT)</label>
+                <input type="number" name="valor" class="input-field" placeholder="0" step="0.01" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Metodo de Recebimento</label>
+                <select name="metodo" class="input-field" required>
+                  <option value="">Selecione</option>
+                  <option value="Transferencia">Transferencia Bancaria</option>
+                  <option value="Dinheiro">Dinheiro</option>
+                  <option value="M-Pesa">M-Pesa</option>
+                  <option value="e-Mola">e-Mola</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Data</label>
+                <input type="date" name="data" class="input-field" value="${new Date().toISOString().split('T')[0]}" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Observacao</label>
+                <textarea name="observacao" class="input-field" rows="2"></textarea>
+              </div>
+              <div class="flex gap-4 pt-4">
+                <button type="button" class="btn-secondary flex-1" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="btn-primary flex-1">Salvar</button>
+              </div>
+            </form>
+          `;
+          break;
+
+        case 'despesa':
+          html = `
+            <h3 class="text-xl font-bold mb-6">Nova Despesa</h3>
+            <form id="formDespesa" class="space-y-4">
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Categoria</label>
+                <select name="categoria" class="input-field" required>
+                  <option value="">Selecione</option>
+                  <option value="Alimentacao">Alimentacao</option>
+                  <option value="Transporte">Transporte</option>
+                  <option value="Saude">Saude</option>
+                  <option value="Educacao">Educacao</option>
+                  <option value="Lazer">Lazer</option>
+                  <option value="Habitacao">Habitacao</option>
+                  <option value="Internet">Internet</option>
+                  <option value="Energia">Energia</option>
+                  <option value="Impostos">Impostos</option>
+                  <option value="Outros">Outros</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Subcategoria</label>
+                <input type="text" name="subcategoria" class="input-field" placeholder="Ex: Supermercado">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Descricao</label>
+                <input type="text" name="descricao" class="input-field" placeholder="Descricao da despesa" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Valor (MT)</label>
+                <input type="number" name="valor" class="input-field" placeholder="0" step="0.01" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Metodo de Pagamento</label>
+                <select name="metodo" class="input-field" required>
+                  <option value="">Selecione</option>
+                  <option value="Transferencia">Transferencia Bancaria</option>
+                  <option value="Dinheiro">Dinheiro</option>
+                  <option value="M-Pesa">M-Pesa</option>
+                  <option value="e-Mola">e-Mola</option>
+                  <option value="Cartao">Cartao</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Data</label>
+                <input type="date" name="data" class="input-field" value="${new Date().toISOString().split('T')[0]}" required>
+              </div>
+              <div class="flex gap-4 pt-4">
+                <button type="button" class="btn-secondary flex-1" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="btn-primary flex-1">Salvar</button>
+              </div>
+            </form>
+          `;
+          break;
+
+        case 'emprestimo':
+          html = `
+            <h3 class="text-xl font-bold mb-6">Novo Emprestimo</h3>
+            <form id="formEmprestimo" class="space-y-4">
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Nome do Cliente</label>
+                <input type="text" name="cliente" class="input-field" placeholder="Nome completo" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Valor Inicial (MT)</label>
+                <input type="number" name="valor_inicial" class="input-field" placeholder="0" step="0.01" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Taxa de Juros Mensal</label>
+                <select name="taxa_juros" class="input-field" required>
+                  <option value="">Selecione</option>
+                  <option value="20">20%</option>
+                  <option value="30">30%</option>
+                  <option value="40">40%</option>
+                  <option value="50">50%</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Data de Inicio</label>
+                <input type="date" name="data_inicio" class="input-field" value="${new Date().toISOString().split('T')[0]}" required>
+              </div>
+              <div class="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+                <p class="text-sm text-amber-400">Os juros sao aplicados mensalmente sobre o saldo devedor. Se nao houver pagamento, os juros acumulam.</p>
+              </div>
+              <div class="flex gap-4 pt-4">
+                <button type="button" class="btn-secondary flex-1" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="btn-primary flex-1">Salvar</button>
+              </div>
+            </form>
+          `;
+          break;
+
+        case 'pagamento':
+          const emprestimoId = arguments[1];
+          html = `
+            <h3 class="text-xl font-bold mb-6">Registrar Pagamento</h3>
+            <form id="formPagamento" class="space-y-4">
+              <input type="hidden" name="emprestimo_id" value="${emprestimoId}">
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Valor do Pagamento (MT)</label>
+                <input type="number" name="valor_pago" class="input-field" placeholder="0" step="0.01" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Data do Pagamento</label>
+                <input type="date" name="data_pagamento" class="input-field" value="${new Date().toISOString().split('T')[0]}" required>
+              </div>
+              <div class="flex gap-4 pt-4">
+                <button type="button" class="btn-secondary flex-1" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="btn-primary flex-1">Registrar</button>
+              </div>
+            </form>
+          `;
+          break;
+
+        case 'divida':
+          html = `
+            <h3 class="text-xl font-bold mb-6">Nova Divida</h3>
+            <form id="formDivida" class="space-y-4">
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Nome da Divida</label>
+                <input type="text" name="nome" class="input-field" placeholder="Ex: Emprestimo bancario" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Credor</label>
+                <input type="text" name="credor" class="input-field" placeholder="Ex: Banco BIM" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Valor Total (MT)</label>
+                <input type="number" name="valor_total" class="input-field" placeholder="0" step="0.01" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Taxa de Juros (%)</label>
+                <input type="number" name="taxa_juros" class="input-field" placeholder="0" step="0.01">
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm text-gray-400 mb-2">Num. Parcelas</label>
+                  <input type="number" name="num_parcelas" class="input-field" placeholder="12" required>
+                </div>
+                <div>
+                  <label class="block text-sm text-gray-400 mb-2">Valor Parcela (MT)</label>
+                  <input type="number" name="valor_parcela" class="input-field" placeholder="0" step="0.01" required>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm text-gray-400 mb-2">Data de Inicio</label>
+                  <input type="date" name="data_inicio" class="input-field" value="${new Date().toISOString().split('T')[0]}" required>
+                </div>
+                <div>
+                  <label class="block text-sm text-gray-400 mb-2">Data de Vencimento</label>
+                  <input type="date" name="data_vencimento" class="input-field" required>
+                </div>
+              </div>
+              <div class="flex gap-4 pt-4">
+                <button type="button" class="btn-secondary flex-1" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="btn-primary flex-1">Salvar</button>
+              </div>
+            </form>
+          `;
+          break;
+
+        case 'poupanca':
+          html = `
+            <h3 class="text-xl font-bold mb-6">Nova Poupanca</h3>
+            <form id="formPoupanca" class="space-y-4">
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Nome da Conta</label>
+                <input type="text" name="conta" class="input-field" placeholder="Ex: Fundo de Emergencia" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Valor Inicial (MT)</label>
+                <input type="number" name="valor" class="input-field" placeholder="0" step="0.01" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Data</label>
+                <input type="date" name="data" class="input-field" value="${new Date().toISOString().split('T')[0]}" required>
+              </div>
+              <div class="flex gap-4 pt-4">
+                <button type="button" class="btn-secondary flex-1" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="btn-primary flex-1">Salvar</button>
+              </div>
+            </form>
+          `;
+          break;
+
+        case 'meta':
+          html = `
+            <h3 class="text-xl font-bold mb-6">Nova Meta Financeira</h3>
+            <form id="formMeta" class="space-y-4">
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Nome da Meta</label>
+                <input type="text" name="nome" class="input-field" placeholder="Ex: Comprar casa" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Valor Alvo (MT)</label>
+                <input type="number" name="valor_meta" class="input-field" placeholder="0" step="0.01" required>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Valor Atual (MT)</label>
+                <input type="number" name="valor_atual" class="input-field" placeholder="0" step="0.01" value="0">
+              </div>
+              <div>
+                <label class="block text-sm text-gray-400 mb-2">Prazo</label>
+                <input type="date" name="prazo" class="input-field" required>
+              </div>
+              <div class="flex gap-4 pt-4">
+                <button type="button" class="btn-secondary flex-1" onclick="closeModal()">Cancelar</button>
+                <button type="submit" class="btn-primary flex-1">Salvar</button>
+              </div>
+            </form>
+          `;
+          break;
+      }
+
+      content.innerHTML = html;
+      modal.classList.add('active');
+
+      // Attach form handlers
+      const forms = ['formReceita', 'formDespesa', 'formEmprestimo', 'formPagamento', 'formDivida', 'formPoupanca', 'formMeta'];
+      forms.forEach(formId => {
+        const form = document.getElementById(formId);
+        if (form) {
+          form.addEventListener('submit', handleFormSubmit);
+        }
+      });
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    document.getElementById('modalOverlay').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) {
+        closeModal();
+      }
+    });
+
+    // Form submission handler
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData);
+
+      switch(form.id) {
+        case 'formReceita':
+          saveReceita(data);
+          break;
+        case 'formDespesa':
+          saveDespesa(data);
+          break;
+        case 'formEmprestimo':
+          saveEmprestimo(data);
+          break;
+        case 'formPagamento':
+          savePagamento(data);
+          break;
+        case 'formDivida':
+          saveDivida(data);
+          break;
+        case 'formPoupanca':
+          savePoupanca(data);
+          break;
+        case 'formMeta':
+          saveMeta(data);
+          break;
+      }
+    }
+
+    // CRUD Functions
+    function saveReceita(data) {
+      db.run(`
+        INSERT INTO receitas (valor, fonte, categoria, metodo, data, observacao)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `, [data.valor, data.fonte, data.categoria, data.metodo, data.data, data.observacao || '']);
+      
+      closeModal();
+      showToast('Receita registrada com sucesso!', 'success');
+      refreshAll();
+    }
+
+    function saveDespesa(data) {
+      db.run(`
+        INSERT INTO despesas (valor, categoria, subcategoria, descricao, metodo, data)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `, [data.valor, data.categoria, data.subcategoria || '', data.descricao, data.metodo, data.data]);
+      
+      closeModal();
+      showToast('Despesa registrada com sucesso!', 'success');
+      refreshAll();
+    }
+
+    function saveEmprestimo(data) {
+      db.run(`
+        INSERT INTO emprestimos (cliente, valor_inicial, taxa_juros, saldo_atual, data_inicio, status, ultimo_calculo)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `, [data.cliente, data.valor_inicial, data.taxa_juros, data.valor_inicial, data.data_inicio, 'ativo', data.data_inicio]);
+      
+      closeModal();
+      showToast('Emprestimo registrado com sucesso!', 'success');
+      refreshAll();
+    }
+
+    function savePagamento(data) {
+      const emprestimoId = parseInt(data.emprestimo_id);
+      const valorPago = parseFloat(data.valor_pago);
+
+      // Register payment
+      db.run(`
+        INSERT INTO pagamentos (emprestimo_id, valor_pago, data_pagamento)
+        VALUES (?, ?, ?)
+      `, [emprestimoId, valorPago, data.data_pagamento]);
+
+      // Update loan balance
+      const emprestimo = db.exec(`SELECT saldo_atual FROM emprestimos WHERE id = ${emprestimoId}`);
+      const saldoAtual = emprestimo[0].values[0][0];
+      const novoSaldo = Math.max(0, saldoAtual - valorPago);
+
+      if (novoSaldo <= 0) {
+        db.run(`UPDATE emprestimos SET saldo_atual = 0, status = 'pago' WHERE id = ${emprestimoId}`);
+      } else {
+        db.run(`UPDATE emprestimos SET saldo_atual = ${novoSaldo} WHERE id = ${emprestimoId}`);
+      }
+      
+      closeModal();
+      showToast('Pagamento registrado com sucesso!', 'success');
+      refreshAll();
+    }
+
+    function saveDivida(data) {
+      db.run(`
+        INSERT INTO dividas (nome, credor, valor_total, taxa_juros, num_parcelas, valor_parcela, parcelas_pagas, data_inicio, data_vencimento, status)
+        VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?, 'pendente')
+      `, [data.nome, data.credor, data.valor_total, data.taxa_juros || 0, data.num_parcelas, data.valor_parcela, data.data_inicio, data.data_vencimento]);
+      
+      closeModal();
+      showToast('Divida registrada com sucesso!', 'success');
+      refreshAll();
+    }
+
+    function savePoupanca(data) {
+      db.run(`
+        INSERT INTO poupancas (conta, valor, data)
+        VALUES (?, ?, ?)
+      `, [data.conta, data.valor, data.data]);
+      
+      closeModal();
+      showToast('Poupanca criada com sucesso!', 'success');
+      refreshAll();
+    }
+
+    function saveMeta(data) {
+      db.run(`
+        INSERT INTO metas (nome, valor_meta, valor_atual, prazo, data_criacao)
+        VALUES (?, ?, ?, ?, ?)
+      `, [data.nome, data.valor_meta, data.valor_atual || 0, data.prazo, new Date().toISOString().split('T')[0]]);
+      
+      closeModal();
+      showToast('Meta criada com sucesso!', 'success');
+      refreshAll();
+    }
+
+    // Delete functions
+    function deleteReceita(id) {
+      if (confirm('Tem certeza que deseja excluir esta receita?')) {
+        db.run(`DELETE FROM receitas WHERE id = ${id}`);
+        showToast('Receita excluida!', 'success');
+        refreshAll();
+      }
+    }
+
+    function deleteDespesa(id) {
+      if (confirm('Tem certeza que deseja excluir esta despesa?')) {
+        db.run(`DELETE FROM despesas WHERE id = ${id}`);
+        showToast('Despesa excluida!', 'success');
+        refreshAll();
+      }
+    }
+
+    function deleteEmprestimo(id) {
+      if (confirm('Tem certeza que deseja excluir este emprestimo?')) {
+        db.run(`DELETE FROM emprestimos WHERE id = ${id}`);
+        db.run(`DELETE FROM pagamentos WHERE emprestimo_id = ${id}`);
+        showToast('Emprestimo excluido!', 'success');
+        refreshAll();
+      }
+    }
+
+    function deleteDivida(id) {
+      if (confirm('Tem certeza que deseja excluir esta divida?')) {
+        db.run(`DELETE FROM dividas WHERE id = ${id}`);
+        showToast('Divida excluida!', 'success');
+        refreshAll();
+      }
+    }
+
+    function deletePoupanca(id) {
+      if (confirm('Tem certeza que deseja excluir esta poupanca?')) {
+        db.run(`DELETE FROM poupancas WHERE id = ${id}`);
+        showToast('Poupanca excluida!', 'success');
+        refreshAll();
+      }
+    }
+
+    function deleteMeta(id) {
+      if (confirm('Tem certeza que deseja excluir esta meta?')) {
+        db.run(`DELETE FROM metas WHERE id = ${id}`);
+        showToast('Meta excluida!', 'success');
+        refreshAll();
+      }
+    }
+
+    // Apply interest to loans
+    function aplicarJuros() {
+      const hoje = new Date();
+      const mesAtual = hoje.getMonth();
+      const anoAtual = hoje.getFullYear();
+
+      const emprestimos = db.exec(`SELECT id, saldo_atual, taxa_juros, ultimo_calculo FROM emprestimos WHERE status = 'ativo'`);
+      
+      if (emprestimos.length === 0 || emprestimos[0].values.length === 0) return;
+
+      emprestimos[0].values.forEach(emp => {
+        const id = emp[0];
+        const saldoAtual = emp[1];
+        const taxa = emp[2] / 100;
+        const ultimoCalculo = new Date(emp[3]);
+
+        // Check if interest was already applied this month
+        if (ultimoCalculo.getMonth() !== mesAtual || ultimoCalculo.getFullYear() !== anoAtual) {
+          const novoSaldo = saldoAtual * (1 + taxa);
+          db.run(`UPDATE emprestimos SET saldo_atual = ?, ultimo_calculo = ? WHERE id = ?`, [novoSaldo, hoje.toISOString().split('T')[0], id]);
+        }
+      });
+    }
+
+    // Refresh all data
+    function refreshAll() {
+      if (!db) return;
+
+      aplicarJuros();
+      updateDashboard();
+      updateReceitas();
+      updateDespesas();
+      updateEmprestimos();
+      updateDividas();
+      updatePoupancas();
+      updateMetas();
+      updateAlertas();
+      updateRelatorios();
+    }
+
+    // Update Dashboard
+    function updateDashboard() {
+      const receitas = db.exec("SELECT SUM(valor) FROM receitas");
+      const despesas = db.exec("SELECT SUM(valor) FROM despesas");
+      const emprestados = db.exec("SELECT SUM(valor_inicial) FROM emprestimos WHERE status = 'ativo'");
+      const aReceber = db.exec("SELECT SUM(saldo_atual) FROM emprestimos WHERE status = 'ativo'");
+      const poupancas = db.exec("SELECT SUM(valor) FROM poupancas");
+      const dividas = db.exec("SELECT SUM(valor_total) FROM dividas WHERE status != 'pago'");
+
+      const totalReceitas = receitas[0]?.values[0][0] || 0;
+      const totalDespesas = despesas[0]?.values[0][0] || 0;
+      const totalEmprestado = emprestados[0]?.values[0][0] || 0;
+      const totalAReceber = aReceber[0]?.values[0][0] || 0;
+      const totalPoupancas = poupancas[0]?.values[0][0] || 0;
+      const totalDividas = dividas[0]?.values[0][0] || 0;
+
+      const saldo = totalReceitas - totalDespesas - totalEmprestado + totalAReceber + totalPoupancas - totalDividas;
+
+      document.getElementById('statSaldo').textContent = formatCurrency(saldo);
+      document.getElementById('statReceitas').textContent = formatCurrency(totalReceitas);
+      document.getElementById('statDespesas').textContent = formatCurrency(totalDespesas);
+      document.getElementById('statEmprestado').textContent = formatCurrency(totalAReceber);
+
+      // Update charts
+      updateCharts();
+      updateRecentTransactions();
+    }
+
+    function updateCharts() {
+      // Monthly flow chart
+      const receitas = db.exec("SELECT strftime('%m', data) as mes, SUM(valor) FROM receitas GROUP BY mes ORDER BY mes");
+      const despesas = db.exec("SELECT strftime('%m', data) as mes, SUM(valor) FROM despesas GROUP BY mes ORDER BY mes");
+
+      const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      const receitasData = new Array(12).fill(0);
+      const despesasData = new Array(12).fill(0);
+
+      if (receitas[0]) {
+        receitas[0].values.forEach(r => {
+          const mes = parseInt(r[0]) - 1;
+          receitasData[mes] = r[1];
+        });
+      }
+
+      if (despesas[0]) {
+        despesas[0].values.forEach(d => {
+          const mes = parseInt(d[0]) - 1;
+          despesasData[mes] = d[1];
+        });
+      }
+
+      const ctxFluxo = document.getElementById('fluxoChart').getContext('2d');
+      
+      if (fluxoChart) {
+        fluxoChart.destroy();
+      }
+
+      fluxoChart = new Chart(ctxFluxo, {
+        type: 'line',
+        data: {
+          labels: meses,
+          datasets: [
+            {
+              label: 'Receitas',
+              data: receitasData,
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              tension: 0.4,
+              fill: true
+            },
+            {
+              label: 'Despesas',
+              data: despesasData,
+              borderColor: '#ef4444',
+              backgroundColor: 'rgba(239, 68, 68, 0.1)',
+              tension: 0.4,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              labels: { color: '#8a9a8f' }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#8a9a8f' },
+              grid: { color: 'rgba(255,255,255,0.05)' }
+            },
+            y: {
+              ticks: { color: '#8a9a8f' },
+              grid: { color: 'rgba(255,255,255,0.05)' }
+            }
+          }
+        }
+      });
+
+      // Expenses by category chart
+      const despesasCategoria = db.exec("SELECT categoria, SUM(valor) FROM despesas GROUP BY categoria");
+
+      const ctxDespesas = document.getElementById('despesasChart').getContext('2d');
+      
+      if (despesasChart) {
+        despesasChart.destroy();
+      }
+
+      const categorias = despesasCategoria[0]?.values.map(c => c[0]) || [];
+      const valores = despesasCategoria[0]?.values.map(c => c[1]) || [];
+
+      despesasChart = new Chart(ctxDespesas, {
+        type: 'doughnut',
+        data: {
+          labels: categorias.length > 0 ? categorias : ['Sem dados'],
+          datasets: [{
+            data: valores.length > 0 ? valores : [1],
+            backgroundColor: [
+              '#c9a227', '#10b981', '#ef4444', '#f59e0b', '#3b82f6',
+              '#8b5cf6', '#ec4899', '#14b8a6', '#f97316', '#6366f1'
+            ],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: { color: '#8a9a8f' }
+            }
+          }
+        }
+      });
+    }
+
+    function updateRecentTransactions() {
+      const tbody = document.getElementById('recentTransactions');
+      
+      const receitas = db.exec("SELECT data, fonte, categoria, 'receita' as tipo, valor FROM receitas ORDER BY data DESC LIMIT 5");
+      const despesas = db.exec("SELECT data, descricao, categoria, 'despesa' as tipo, valor FROM despesas ORDER BY data DESC LIMIT 5");
+
+      let transactions = [];
+      
+      if (receitas[0]) {
+        transactions = transactions.concat(receitas[0].values);
+      }
+      if (despesas[0]) {
+        transactions = transactions.concat(despesas[0].values);
+      }
+
+      transactions.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+
+      if (transactions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-gray-500 py-8">Nenhuma transacao registrada</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = transactions.slice(0, 10).map(t => `
+        <tr>
+          <td>${formatDate(t[0])}</td>
+          <td>${t[1]}</td>
+          <td><span class="badge badge-info">${t[2]}</span></td>
+          <td><span class="badge ${t[3] === 'receita' ? 'badge-success' : 'badge-danger'}">${t[3] === 'receita' ? 'Entrada' : 'Saida'}</span></td>
+          <td class="${t[3] === 'receita' ? 'text-emerald-400' : 'text-red-400'}">${t[3] === 'receita' ? '+' : '-'} ${formatCurrency(t[4])}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Update Receitas table
+    function updateReceitas() {
+      const tbody = document.getElementById('receitasTable');
+      const receitas = db.exec("SELECT id, data, fonte, categoria, metodo, valor FROM receitas ORDER BY data DESC");
+
+      if (!receitas[0] || receitas[0].values.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500 py-8">Nenhuma receita registrada</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = receitas[0].values.map(r => `
+        <tr>
+          <td>${formatDate(r[1])}</td>
+          <td>${r[2]}</td>
+          <td><span class="badge badge-info">${r[3]}</span></td>
+          <td>${r[4]}</td>
+          <td class="text-emerald-400 font-semibold">${formatCurrency(r[5])}</td>
+          <td>
+            <button onclick="deleteReceita(${r[0]})" class="text-red-400 hover:text-red-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Update Despesas table
+    function updateDespesas() {
+      const tbody = document.getElementById('despesasTable');
+      const despesas = db.exec("SELECT id, data, categoria, subcategoria, descricao, valor FROM despesas ORDER BY data DESC");
+
+      if (!despesas[0] || despesas[0].values.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500 py-8">Nenhuma despesa registrada</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = despesas[0].values.map(d => `
+        <tr>
+          <td>${formatDate(d[1])}</td>
+          <td><span class="badge badge-warning">${d[2]}</span></td>
+          <td>${d[3] || '-'}</td>
+          <td>${d[4]}</td>
+          <td class="text-red-400 font-semibold">${formatCurrency(d[5])}</td>
+          <td>
+            <button onclick="deleteDespesa(${d[0]})" class="text-red-400 hover:text-red-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Update Emprestimos
+    function updateEmprestimos() {
+      const tbody = document.getElementById('emprestimosTable');
+      const emprestimos = db.exec("SELECT id, cliente, valor_inicial, taxa_juros, saldo_atual, data_inicio, status FROM emprestimos ORDER BY data_inicio DESC");
+
+      const totalEmprestado = db.exec("SELECT SUM(valor_inicial) FROM emprestimos WHERE status = 'ativo'");
+      const totalReceber = db.exec("SELECT SUM(saldo_atual) FROM emprestimos WHERE status = 'ativo'");
+      
+      const valorEmprestado = totalEmprestado[0]?.values[0][0] || 0;
+      const valorReceber = totalReceber[0]?.values[0][0] || 0;
+      const jurosAcumulados = valorReceber - valorEmprestado;
+
+      document.getElementById('totalEmprestado').textContent = formatCurrency(valorEmprestado);
+      document.getElementById('totalReceber').textContent = formatCurrency(valorReceber);
+      document.getElementById('totalJuros').textContent = formatCurrency(Math.max(0, jurosAcumulados));
+
+      if (!emprestimos[0] || emprestimos[0].values.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-500 py-8">Nenhum emprestimo registrado</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = emprestimos[0].values.map(e => `
+        <tr>
+          <td class="font-medium">${e[1]}</td>
+          <td>${formatCurrency(e[2])}</td>
+          <td><span class="badge badge-warning">${e[3]}%</span></td>
+          <td class="text-amber-400 font-semibold">${formatCurrency(e[4])}</td>
+          <td>${formatDate(e[5])}</td>
+          <td><span class="badge ${e[6] === 'ativo' ? 'badge-success' : 'badge-info'}">${e[6] === 'ativo' ? 'Ativo' : 'Pago'}</span></td>
+          <td>
+            <div class="flex gap-2">
+              ${e[6] === 'ativo' ? `
+                <button onclick="openModal('pagamento', ${e[0]})" class="text-emerald-400 hover:text-emerald-300" title="Registrar pagamento">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+                  </svg>
+                </button>
+              ` : ''}
+              <button onclick="deleteEmprestimo(${e[0]})" class="text-red-400 hover:text-red-300" title="Excluir">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Update Dividas
+    function updateDividas() {
+      const tbody = document.getElementById('dividasTable');
+      const dividas = db.exec("SELECT id, nome, credor, valor_total, num_parcelas, valor_parcela, parcelas_pagas, data_vencimento, status FROM dividas ORDER BY data_vencimento");
+
+      if (!dividas[0] || dividas[0].values.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-500 py-8">Nenhuma divida registrada</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = dividas[0].values.map(d => `
+        <tr>
+          <td class="font-medium">${d[1]}</td>
+          <td>${d[2]}</td>
+          <td class="text-red-400 font-semibold">${formatCurrency(d[3])}</td>
+          <td>${d[7]}/${d[4]}</td>
+          <td>${formatDate(d[8])}</td>
+          <td><span class="badge ${d[9] === 'pendente' ? 'badge-warning' : 'badge-success'}">${d[9] === 'pendente' ? 'Pendente' : 'Pago'}</span></td>
+          <td>
+            <div class="flex gap-2">
+              <button onclick="pagarParcela(${d[0]})" class="text-emerald-400 hover:text-emerald-300" title="Pagar parcela">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </button>
+              <button onclick="deleteDivida(${d[0]})" class="text-red-400 hover:text-red-300" title="Excluir">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function pagarParcela(id) {
+      const divida = db.exec(`SELECT num_parcelas, parcelas_pagas FROM dividas WHERE id = ${id}`);
+      const numParcelas = divida[0].values[0][0];
+      const parcelasPagas = divida[0].values[0][1] + 1;
+
+      if (parcelasPagas >= numParcelas) {
+        db.run(`UPDATE dividas SET parcelas_pagas = ${parcelasPagas}, status = 'pago' WHERE id = ${id}`);
+        showToast('Divida totalmente paga!', 'success');
+      } else {
+        db.run(`UPDATE dividas SET parcelas_pagas = ${parcelasPagas} WHERE id = ${id}`);
+        showToast('Parcela paga!', 'success');
+      }
+      refreshAll();
+    }
+
+    // Update Poupancas
+    function updatePoupancas() {
+      const grid = document.getElementById('poupancasGrid');
+      const poupancas = db.exec("SELECT id, conta, valor, data FROM poupancas ORDER BY data DESC");
+
+      if (!poupancas[0] || poupancas[0].values.length === 0) {
+        grid.innerHTML = '<div class="card p-6 text-center"><p class="text-gray-500">Nenhuma poupanca criada</p></div>';
+        return;
+      }
+
+      grid.innerHTML = poupancas[0].values.map(p => `
+        <div class="card p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="font-semibold">${p[1]}</h4>
+            <button onclick="deletePoupanca(${p[0]})" class="text-red-400 hover:text-red-300">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+            </button>
+          </div>
+          <p class="text-3xl font-bold text-emerald-400 mb-2">${formatCurrency(p[2])}</p>
+          <p class="text-sm text-gray-500">Desde ${formatDate(p[3])}</p>
+        </div>
+      `).join('');
+    }
+
+    // Update Metas
+    function updateMetas() {
+      const grid = document.getElementById('metasGrid');
+      const metas = db.exec("SELECT id, nome, valor_meta, valor_atual, prazo FROM metas ORDER BY prazo");
+
+      if (!metas[0] || metas[0].values.length === 0) {
+        grid.innerHTML = '<div class="card p-6 text-center"><p class="text-gray-500">Nenhuma meta definida</p></div>';
+        return;
+      }
+
+      grid.innerHTML = metas[0].values.map(m => {
+        const progresso = Math.min(100, (m[3] / m[2]) * 100);
+        const diasRestantes = Math.ceil((new Date(m[4]) - new Date()) / (1000 * 60 * 60 * 24));
+
+        return `
+          <div class="card p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h4 class="font-semibold">${m[1]}</h4>
+              <button onclick="deleteMeta(${m[0]})" class="text-red-400 hover:text-red-300">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+              </button>
+            </div>
+            <div class="mb-4">
+              <div class="flex justify-between text-sm mb-2">
+                <span class="text-gray-400">Progresso</span>
+                <span class="text-amber-400">${progresso.toFixed(1)}%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${progresso}%"></div>
+              </div>
+            </div>
+            <div class="flex justify-between items-end">
+              <div>
+                <p class="text-sm text-gray-400">Atual</p>
+                <p class="font-semibold text-emerald-400">${formatCurrency(m[3])}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">Meta</p>
+                <p class="font-semibold">${formatCurrency(m[2])}</p>
+              </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-700 flex justify-between items-center">
+              <span class="text-sm text-gray-500">${diasRestantes > 0 ? `${diasRestantes} dias restantes` : 'Prazo expirado'}</span>
+              <button onclick="adicionarMeta(${m[0]})" class="text-amber-400 text-sm hover:underline">Adicionar</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function adicionarMeta(id) {
+      const valor = prompt('Quanto deseja adicionar a esta meta?');
+      if (valor && !isNaN(valor)) {
+        const meta = db.exec(`SELECT valor_atual FROM metas WHERE id = ${id}`);
+        const valorAtual = meta[0].values[0][0];
+        const novoValor = valorAtual + parseFloat(valor);
+        db.run(`UPDATE metas SET valor_atual = ${novoValor} WHERE id = ${id}`);
+        showToast('Valor adicionado a meta!', 'success');
+        refreshAll();
+      }
+    }
+
+    // Update Alertas
+    function updateAlertas() {
+      const alertasList = document.getElementById('alertasList');
+      const alertas = [];
+
+      // Check for due debts
+      const dividasVencendo = db.exec(`
+        SELECT nome, data_vencimento, valor_parcela 
+        FROM dividas 
+        WHERE status = 'pendente' 
+        AND date(data_vencimento) BETWEEN date('now') AND date('now', '+7 days')
+      `);
+
+      if (dividasVencendo[0]) {
+        dividasVencendo[0].values.forEach(d => {
+          alertas.push({
+            tipo: 'warning',
+            titulo: 'Divida proxima do vencimento',
+            mensagem: `${d[0]} vence em ${formatDate(d[1])} - Parcela: ${formatCurrency(d[2])}`
+          });
+        });
+      }
+
+      // Check loan payments
+      const emprestimosAtivos = db.exec(`
+        SELECT cliente, saldo_atual 
+        FROM emprestimos 
+        WHERE status = 'ativo'
+      `);
+
+      if (emprestimosAtivos[0]) {
+        emprestimosAtivos[0].values.forEach(e => {
+          alertas.push({
+            tipo: 'info',
+            titulo: 'Emprestimo ativo',
+            mensagem: `${e[0]} deve ${formatCurrency(e[1])}`
+          });
+        });
+      }
+
+      // Check low balance
+      const receitas = db.exec("SELECT SUM(valor) FROM receitas");
+      const despesas = db.exec("SELECT SUM(valor) FROM despesas");
+      const saldo = (receitas[0]?.values[0][0] || 0) - (despesas[0]?.values[0][0] || 0);
+
+      if (saldo < 5000) {
+        alertas.push({
+          tipo: 'danger',
+          titulo: 'Saldo baixo',
+          mensagem: `Seu saldo atual e de ${formatCurrency(saldo)}`
+        });
+      }
+
+      if (alertas.length === 0) {
+        alertasList.innerHTML = '<div class="card p-6 text-center"><p class="text-gray-500">Nenhum alerta no momento</p></div>';
+        return;
+      }
+
+      alertasList.innerHTML = alertas.map(a => `
+        <div class="card p-6 flex items-start gap-4">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center ${a.tipo === 'danger' ? 'bg-red-500/20' : a.tipo === 'warning' ? 'bg-amber-500/20' : 'bg-blue-500/20'}">
+            <svg class="w-5 h-5 ${a.tipo === 'danger' ? 'text-red-400' : a.tipo === 'warning' ? 'text-amber-400' : 'text-blue-400'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold">${a.titulo}</h4>
+            <p class="text-sm text-gray-400">${a.mensagem}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Update Relatorios
+    function updateRelatorios() {
+      const receitas = db.exec("SELECT SUM(valor) FROM receitas");
+      const despesas = db.exec("SELECT SUM(valor) FROM despesas");
+
+      const totalReceitas = receitas[0]?.values[0][0] || 0;
+      const totalDespesas = despesas[0]?.values[0][0] || 0;
+      const balanco = totalReceitas - totalDespesas;
+
+      document.getElementById('relReceitas').textContent = formatCurrency(totalReceitas);
+      document.getElementById('relDespesas').textContent = formatCurrency(totalDespesas);
+      document.getElementById('relBalanco').textContent = formatCurrency(balanco);
+
+      // Update report chart
+      const ctxRelatorio = document.getElementById('relatorioChart').getContext('2d');
+      
+      if (relatorioChart) {
+        relatorioChart.destroy();
+      }
+
+      relatorioChart = new Chart(ctxRelatorio, {
+        type: 'bar',
+        data: {
+          labels: ['Receitas', 'Despesas', 'Balanco'],
+          datasets: [{
+            data: [totalReceitas, totalDespesas, balanco],
+            backgroundColor: ['#10b981', '#ef4444', balanco >= 0 ? '#c9a227' : '#ef4444'],
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#8a9a8f' },
+              grid: { display: false }
+            },
+            y: {
+              ticks: { color: '#8a9a8f' },
+              grid: { color: 'rgba(255,255,255,0.05)' }
+            }
+          }
+        }
+      });
+    }
+
+    // Tab switching for reports
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Export CSV
+    function exportCSV() {
+      if (!db) return;
+
+      let csv = 'Tipo,Data,Descricao,Categoria,Valor\n';
+
+      const receitas = db.exec("SELECT 'Receita', data, fonte, categoria, valor FROM receitas");
+      const despesas = db.exec("SELECT 'Despesa', data, descricao, categoria, valor FROM despesas");
+
+      if (receitas[0]) {
+        receitas[0].values.forEach(r => {
+          csv += r.join(',') + '\n';
+        });
+      }
+
+      if (despesas[0]) {
+        despesas[0].values.forEach(d => {
+          csv += d.join(',') + '\n';
+        });
+      }
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `micten_vic_relatorio_${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+
+      showToast('Relatorio exportado com sucesso!', 'success');
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initDatabase);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+  </script>
+</body>
 </html>
